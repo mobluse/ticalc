@@ -1,0 +1,133 @@
+Converts numbers between different bases (radices). 
+v1.0 for TI-82.
+----begin documentation----
+
+    BASECONV v1.0 is Freeware
+    Commercial Distribution Restricted
+    Copyright (C) 1994 by Mikael Bonnier, Lund, Sweden.
+
+
+1. System and Memory Requirements
+This program is for the TI-82. It consists of one main program,
+that uses 137 bytes. It requires additionaly a minimum of 94 bytes,
+and a maximum of 1858 bytes for data to run, depending on the number 
+of digits in the input and output number.
+
+BASECONV uses or alters these variables:
+Real:   A,I,J,O
+List:   L1,L2
+
+
+2. Installation
+If you have TI-GRAPH LINK UUDecode this file, and send the resulting
+BASECONV.82P program to the calculator. If you don't have a
+link you will have to enter the ASCII82P listing below.
+
+
+3. User Instructions
+First you have to setup the bases (radices) of the input and 
+output number, you do this by storing to the variables I and O.
+Say you want convert from base (radix) 10 (decimal) to base 16 
+(hexadecimal, or sedecimal as some informationtheorists would like 
+us to say). Then you: 10->I:16->O [ENTER]. The bases must be 
+integers greater than or equal to two (2, binary is the smallest
+base).
+
+Now you enter your number as a list, with one "metadigit" per list 
+element. The reason i call them metadigits is because they can 
+consist of several decimal digits. The metadigits should be in the 
+interval 0 to InBase-1 (i.e. I-1).
+
+To convert 753664dec to hex enter: {7,5,3,6,6,4} [ENTER], this 
+stores the list in Ans, which is exactly what BASECONV wants. Now 
+enter: prgmBASECONV [ENTER], and the the result is soon displayed. 
+The result is also stored in Ans (and L2), in case you should want to use
+it further.
+
+In the case Ans is displayed as {11 8 0 0 0}, i.e. B8000hex if you
+substitute the hexdigits 'A'=10, 'B'=11, 'C'=12, 'D'=13, 'E'=14, 
+'F'=15, for the "metadigits" in decimal form. In this way bases up 
+to 36 (='Z') is usually written. Another case when metadigits 
+themselves has digits is the sexagesimal system (base=60), which
+the TI-82 has built in functions to handle, see ANGLE menu.
+
+Another example: Convert B8000hex to binary.
+   16->I:2->O:{11,8,0,0,0}:prgmBASECONV [ENTER]
+   Ans= {1 0 1 1 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0}
+Use the arrow keys to scroll the result sideways.
+You can also view the result using the list editor:
+   [STAT] 1 (Edit...)
+As you may notice the number in the original base is stored in L1.
+
+The reason why I choose to set I and O outside the program is 
+because often one needs to convert many numbers in one direction,
+and this saves typing.
+
+Tip:
+Entering decimal numbers can be simplified; you don't need commas 
+between digits:
+     10->I:8->O:{753664}:prgmBASECONV
+     Ans= {2 7 0 0 0 0 0}
+That is 753664decimal is 2700000octal.
+There is also a smart manual way to convert between bases 2, 8, and 
+16, or between 10, 100, and 1000, but that I leave to somebody else
+to teach.
+
+Warning:
+This program is not secure. You can enter erroneous indata 
+without the program complaining, and you may receive reasonable 
+but incorrect outdata. But it is not difficult to add code to make
+it safe.
+
+
+4. References      
+Check out any reasonable text on algebra or switching theory,
+e.g. (sorry only in Swedish):
+
+Mats Cedervall and Goran Lindh.
+"Digitalteknik".
+Department of Information Theory, Lund University, Lund, 1993.
+
+
+Suggestions, improvements, bug, and bad-English-in-doc reports
+are always welcome to:
+                 Mikael Bonnier
+                 Osten Undens gata 88
+                 SE-227 62  LUND
+                 SWEDEN
+                             
+Or use my internet addresses:
+                 mikael.bonnier@gmail.com
+                 http://www.df.lth.se.orbin.se/~mikaelb/
+
+// Mikael Bonnier
+/////////////////////////////////////////////////////////////////////
+----begin ascii----
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=BASECONV
+\FILE=BASECONV.82P
+Disp "BASES:"
+Disp " IN I=",I
+Disp " OUT O=",O
+Ans\->\\L1\
+0\->\A
+For(J,1,dim \L1\)
+IA+\L1\(J)\->\A
+End
+\(-)\int \(-)\(log A/log O)\->\dim \L2\
+For(J,dim \L2\,1,\(-)\1)
+OfPart (A/O)\->\\L2\(J)
+int (A/O)\->\A
+End
+\L2\
+\STOP82\
+----begin uue----
+begin 644 BASECONV.82P
+M*BI423@R*BH:"@`Q.3DT($UI:V%E;"!";VYN:65R+&UI:V%E;&)`9&8N;'1H
+M+G-E``````",``L`?0`%0D%314-/3E9]`'L`WBI"05-%4SXJ/]XJ*4E.*4EJ
+M*BM)/]XJ*4]55"E/:BHK3S]R!%T`/S`$03_32BLQ*[5=`!$_24%P70`02A$$
+M03_4/["QL!#`08/`3Q$$M5T!/]-**[5=`2LQ*[`Q$3]/NA!!@T\1!%T!$$H1
+1/[$008-/$01!/]0_70$_%R@`
+`
+end

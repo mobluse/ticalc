@@ -1,0 +1,73 @@
+A days between dates game.
+----begin documentation----
+This 82u-file was prepared by Mikael Bonnier, http://www.df.lth.se.orbin.se/~mikaelb/.
+
+			   *************************
+			   * DBD.82P for the TI-82 *
+			   *************************
+
+ACKNOWLEDGMENT
+
+DBD.82P was written by Ralph Payne of the TI Graphics Team and is
+released to the public domain.	You may copy and change this program.
+
+INTRODUCTION
+
+This program calculates the days between dates.
+
+HOW TO PLAY DBD
+
+This program, DBD, calculates the days between dates. The program prompts
+you for two dates.  After each date it displays the day of the week for that
+date. After the second date the number of days between the two dates is
+displayed. The number of days between dates is calculated such that there are
+365 days between 1/1/93 and 1/1/94. The algorithm logic recognizes that the 
+year 1900 was not a leap year and that the year 2000 is a leap year. This is
+because leap years are defined to be those years that are divisible by four 
+unless they are divisible by one hundred unless they are also divisible by 
+four hundred.
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 06/03/93, 10:41
+\NAME=DBD
+\FILE=DBD.82P
+:1\->\F
+:For(I,1,2)
+:F\->\G
+:Input "ENTER MONTH ",M
+:Input "ENTER DAY ",D
+:Input "ENTER YEAR ",Y
+:If M<3
+:Then:Y-1\->\Z
+:Else:Y\->\Z:End
+:365*Y+D+int (30.6*M-30.3)+int (Z/4)-int (Z/100)+int (Z/400)+int (3/(M+\#\
+1))*(M+1)+5\->\F
+:
+:7*fPart (F/7)\->\D
+:int (D+.5)\->\D
+:If D=0:7\->\D
+:If D=1:Disp "SUNDAY"
+:If D=2:Disp "MONDAY"
+:If D=3:Disp "TUESDAY"
+:If D=4:Disp "WEDNESDAY"
+:If D=5:Disp "THURSDAY"
+:If D=6:Disp "FRIDAY"
+:If D=7:Disp "SATURDAY"
+:End
+:F-G\->\D
+:Disp "DAYS BETWEEN",D
+\STOP82\
+----begin uue----
+begin 644 DBD.82P
+M*BI423@R*BH:"@!0<F]G<F%M(&9I;&4@9&%T960@,#8O,#,O.3,L(#$P.C0Q
+M``"4.HAES+I8`0L`20$%1$)$``````!)`4<!,01&/]-)*S$K,A$_1@1'/]PJ
+M14Y415(I34].5$@I*BM-/]PJ14Y415(I1$%9*2HK1#_<*D5.5$52*5E%05(I
+M*BM9/\Y-:S,_SSY9<3$$6C_0/ED$6C[4/S,V-8)9<$1PL1`S,#HV@DUQ,S`Z
+M,Q%PL1!:@S01<;$06H,Q,#`1<+$06H,T,#`1<+$0,X,037`Q$1&"$$UP,1%P
+M-01&/S\W@KH01H,W$01$/[$01'`Z-1$$1#_.1&HP/C<$1#_.1&HQ/MXJ4U5.
+M1$%9*C_.1&HR/MXJ34].1$%9*C_.1&HS/MXJ5%5%4T1!62H_SD1J-#[>*E=%
+M1$Y%4T1!62H_SD1J-3[>*E1(55)31$%9*C_.1&HV/MXJ1E))1$%9*C_.1&HW
+I/MXJ4T%455)$05DJ/]0_1G%'!$0_WBI$05E3*4)%5%=%14XJ*T0_EF8`
+`
+end
+----end uue----

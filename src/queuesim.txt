@@ -1,0 +1,126 @@
+Simulates a bank queue graphically. Uses the negative exponential
+distribution. v1.0 for TI-82.
+----begin documentation----
+
+    QUEUESIM v1.0 is Freeware
+    Commercial Distribution Restricted                 
+    Copyright (C) 1994 by Mikael Bonnier, Lund, Sweden.
+
+
+1. System and Memory Requirements
+This program is for the TI-82. It consists of one main program that
+uses 342 bytes. It requires additionally 105 bytes for data to run.
+
+QUEUESIM uses or alters these variables:
+Real:   A,C,F,G,Q,S,Y
+
+
+2. Installation
+If you have TI-GRAPH LINK UUDecode this file, and send the resulting
+QUEUESIM.82P program to the calculator. If you don't have a link you
+will have to enter the ASCII82P listing below.
+
+
+3. User Instructions
+Example:
+prgmQUEUESIM [ENTER]
+AVERAGE TIMES:
+INTER ARRIVAL? 20 [ENTER]
+SERVICE? 15 [ENTER]
+
+And watch the horizontal bar graph just below Time increase and
+decrease. One pixel corresponds to one queue member. The time
+is in the same units as the inter arrival and service times
+(you may pretend it is in minutes). Note that Time is simulated
+in this program, if the the TI-82 had a realtime clock one could
+wait after each program loop until the realtime was equal to
+the calculated time. This program uses the negative exponential
+distribution, this models an old fashioned bank queue.
+
+Warning: Don't forget your calculator with this program running,
+or else you have to buy new batteries.
+
+
+4. Program Comments
+The program uses lots of ugly gotos, which is the only way to
+code this on the TI-82 (I suppose).
+
+
+5. Reference
+A. K. Dewdney.
+"The (New) Turing Omnibus", ch 4 "Simulation".
+Computer Science Press and W. H. Freeman and Company, New York, 1993.
+
+
+Suggestions, improvements, bug, and bad-English-in-doc reports
+are always welcome to:
+                 Mikael Bonnier
+                 Osten Undens gata 88
+                 SE-227 62  LUND
+                 SWEDEN
+                             
+Or use my internet addresses:
+                 mikael.bonnier@gmail.com
+                 http://www.df.lth.se.orbin.se/~mikaelb/
+
+// Mikael Bonnier
+/////////////////////////////////////////////////////////////////////
+----begin ascii----
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=QUEUESIM
+\FILE=QUEUESIM.82P
+Disp "AVERAGE TIMES:"
+Input "INTER ARRIVAL?",F
+Input "SERVICE?",G
+0\->\C
+0\->\A:0\->\S
+1\->\Q
+FnOff
+PlotsOff
+AxesOff
+ClrDraw
+Text(0,0,"QUEUESIM 1.0"
+Text(6,0,"PRESS ANY KEY TO QUIT"
+Text(23,0,"TIME="
+getKey
+Lbl 0
+If A<S:Goto Y
+A-S\->\A
+C+S\->\C
+Q-1\->\Q
+If Q<95
+Pxl-Off(30,Q
+\(-)\Gln (1-rand\->\S
+Goto E
+Lbl Y
+S-A\->\S
+Lbl 1
+C+A\->\C
+If Q<95
+Pxl-On(30,Q
+Q+1\->\Q
+\(-)\Fln (1-rand\->\A
+Lbl E
+Text(23,20,iPart C
+If getKey\<>\0
+Goto F
+If Q=0:Goto 1
+Goto 0
+Lbl F
+Text(6,0,"(C) 1994 MIKAEL BONNIER"
+Text(12,0,"LUND, SWEDEN"
+\STOP82\
+----begin uue----
+begin 644 QUEUESIM.82P
+M*BI423@R*BH:"@`Q.3DT($UI:V%E;"!";VYN:65R+&UI:V%E;&)`9&8N;'1H
+M+G-E``````!:`0L`2P$%455%545324U+`4D!WBI!5D5204=%*51)3453/BH_
+MW"I)3E1%4BE!4E))5D%,KRHK1C_<*E-%4E9)0T6O*BM'/S`$0S\P!$$^,`13
+M/S$$43^7/^H_?@D_A3^3,"LP*RI1545515-)32DQ.C`J/Y,V*S`K*E!215-3
+M*4%.62E+15DI5$\I455)5"H_DS(S*S`K*E1)345J*C^M/]8P/\Y!:U,^UUD_
+M07%3!$$_0W!3!$,_47$Q!%$_SE%K.34_HC,P*U$_L$>^$#%QJP13/]=%/]99
+M/U-Q0013/]8Q/T-P001#/\Y1:SDU/Z$S,"M1/U%P,011/[!&OA`Q<:L$03_6
+M13^3,C,K,C`KN4,_SJUO,#_71C_.46HP/M<Q/]<P/]9&/Y,V*S`K*A!#$2DQ
+M.3DT*4U)2T%%3"E"3TY.2452*C^3,3(K,"LJ3%5.1"LI4U=%1$5.*C](9P``
+`
+end

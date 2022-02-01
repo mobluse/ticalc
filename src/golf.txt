@@ -1,0 +1,230 @@
+A golf game.
+----begin documentation----
+This 82u-file was prepared by Mikael Bonnier, http://www.df.lth.se.orbin.se/~mikaelb/.
+
+                         **************************
+                         * GOLF.82G for the TI-82 *
+                         **************************
+
+ACKNOWLEDGMENT
+
+GOLF.82G is a group file containing the programs G1.82P, SHOOT.82P, and
+V.82P.	These programs were written by Pat Milheron of the TI Graphics
+Team and are released to the public domain.  You may copy and change these
+programs.
+
+INTRODUCTION
+
+G1.82P is a golf game.
+
+HOW TO PLAY GOLF
+
+Run program G1.  The golf green is drawn, with the ball shown at the lefthand
+side of the screen (a small dot), along with the distance in yards that the
+ball is from the hole.	Press Enter to view your options.  The five options
+are:
+
+1) VIEW  - Press 1 to view the golf green.
+2) AIM   - Press 2 to aim the ball; use the up and down cursor keys to adjust
+           the aim.
+3) WIND  - Press 3 to view the direction of the wind.
+4) CLUB  - Press 4 to choose the golf club to use; press 1-5 to choose the
+           desired club. 
+5) SHOOT - Press 5 to take the shot.  Hit enter and a pixel at the bottom of
+	   the screen will move toward the bar on the bottom righthand side
+	   of the screen.  Hit enter again to stop the pixel from moving -
+	   the closer to the bar that the pixel stops the more power there
+	   will be behind the shot.  The pixel will then start moving back
+	   toward the lefthand side of the screen.  To stop the pixel, hit
+	   enter.  If the pixel stops to the right of the two colons, the
+	   shot will lose power and slice right; if the pixel stops to the
+	   left of the two colons, the shot will lose power and hook left;
+	   if the pixel stops in the center of the two colons, the shot
+	   will go straight.
+
+To return to the options menu, from any screen, press the Enter key.
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:05
+\NAME=G1
+\FILE=G1.82P
+:Lbl 0:"\(-)\16X\^2\+XVsin \@\\->\\Y1\
+:FnOff :AxesOff:CoordOff:Degree:150\->\K:20*rand+3\->\W:360*rand\->\S:1\#\
+50\->\V
+:975-(500rand\->\I:600-(1200rand\->\J:Goto 4
+:Lbl 1:55\->\\@\:0\->\T
+:If (int (3\^-1\\sqrt\((I-1350)\^2\+(J)\^2\))\<=\2:Goto 0
+:ClrDraw:0\->\Q
+:Circle(1350,0,45
+:Pt-On(I,J
+:Pt-On(1350,0
+:StorePic Pic1:Goto V
+:Lbl 2
+:ClrDraw
+:Menu(" OPTIONS ","VIEW",V,"AIM",A,"WIND",W,"CLUB",C,"SHOOT",S
+:
+:Lbl V
+:prgmV
+:Lbl \@\:rand
+:If getKey\<>\105:Goto \@\
+:Goto 2
+:
+:Lbl A
+:prgmV
+:Lbl B
+:Line(I,J,I+10\Delta-x\cos Q,J+10\Delta-y\sin Q)
+:Lbl D
+:rand
+:getKey\->\Y
+:If Y=105:Goto 2
+:5\->\X:If Y=25:Goto E
+:\(-)\5\->\X:If Y\<>\34:Goto D
+:Lbl E
+:If ((Q+X)>85) or ((Q+X)<\(-)\85):Goto D
+:Line(I,J,I+10\Delta-x\cos Q,J+10\Delta-y\sin Q,0
+:Q+X\->\Q:Goto B
+:
+:
+:Lbl W
+:prgmV
+:Text(57,50,"SPEED = ",round(W*.6818181818,1
+:Pxl-On(30,46
+:Pxl-On(30,47
+:Pxl-On(30,48
+:Pxl-On(31,46
+:Pxl-On(31,48
+:Pxl-On(32,46
+:Pxl-On(32,47
+:Pxl-On(32,48
+:Line(Xmin+47\Delta-x\,Ymin+31\Delta-y\,(Xmin+47\Delta-x\)+10\Delta-x\c\#\
+os S,Ymin+31\Delta-y\+10\Delta-y\sin S)
+:Goto \@\
+:
+:Lbl S
+:
+:rand
+:prgmSHOOT
+:Lbl 4
+:If I>1350:Then:1350-(I-1350)\->\I:180+S\->\S:End
+:I\->\Xmin:J-250\->\Ymin:J+250\->\Ymax:1400\->\Xmax
+:If 0>Ymax:75\->\Ymax
+:If 0<Ymin:\(-)\75\->\Ymin
+:Goto 1
+:
+:
+:Lbl C
+:Menu("CHOOSE CLUB","1 WOOD",9,"3 IRON",8,"6 IRON",7,"9 IRON",6,"PUTTER\#\
+",5
+:Lbl 9:130\->\K:Goto 2
+:Lbl 8:120\->\K:Goto 2
+:Lbl 7:100\->\K:Goto 2
+:Lbl 6:85\->\K:Goto 2
+:Lbl 5:55\->\K:Goto 2
+:
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:05
+\NAME=SHOOT
+\FILE=SHOOT.82P
+:RecallPic Pic1
+:Text(57,0," I                 :    :                                  \#\
+                             I"
+:27\->\H:Pxl-On(60,H
+:Lbl W:If getKey\<>\105:Goto W
+:
+:Lbl V:If pxl-Test(60,H+2):Return:5*5
+:Pxl-Off(60,H:2+H\->\H:Pxl-On(60,H
+:If getKey\<>\105:Goto V
+:
+:Text(57,H,"P"
+:K-((33*3)-((H-27)/2)*3)\->\V
+:0\->\Z:If K=55:Goto 0
+:Lbl 7:If H\<=\3:Return
+:Pxl-On(60,H-2:\(-)\2+H\->\H:2/5/5/.2
+:If getKey=105:Goto 8
+:Pxl-Off(60,H:Goto 7
+:Lbl 8
+:Text(57,H,"H"
+:sin sin sin sin sin sin sin 5
+:
+:
+:(H-1)/2\->\H
+:If (H=11) or (H=10):Goto 0
+:If H>9:Goto 1
+:(10-H\->\Z
+:Z*5+\@\\->\\@\:Goto 0
+:
+:
+:
+:Lbl 1
+:(11-H\->\Z
+:Z*5+\@\\->\\@\:Goto 0
+:
+:
+:
+:
+:Lbl 0
+:ClrDraw:RecallPic Pic1
+:
+:
+:Pt-On(I,J)
+:Repeat (\Y1\(T)\<=\0)
+:[[I,J]\->\[A]
+:.5V{cos \@\,sin (Q+Z)\->\\L1\
+:.6W{cos S,sin S\->\\L2\:If K=55:Fill(0,\L2\)
+:(\L1\+\L2\)\->\\L3\
+:
+:Pt-Off(I,J
+:I+\L3\(1)cos (Q+Z)\->\I
+:J+\L3\(2)\->\J
+:Pt-On(I,J)
+:T+.5\->\T
+:If (K\<>\55) and (T=.5):\tan^-1\ ((J-[A](1,2))/(I-[A](1,1))\->\Q
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:05
+\NAME=V
+\FILE=V.82P
+:RecallPic Pic1
+:Text(57,0,"YARDS = ",int (3\^-1\\sqrt\((I-1350)\^2\+(J)\^2\
+\STOP82\
+----begin uue----
+begin 644 GOLF.82G
+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
+:*2HKL1`S#+P0$$EQ,3,U,!$-<!!*$0T_:(T`
+`
+end
+----end uue----

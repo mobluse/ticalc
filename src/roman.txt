@@ -1,0 +1,252 @@
+Converts numbers in arabic notation to roman numerals.
+Does also find the minimal roman form.
+----begin documentation----
+ 
+    ROMAN v1.0 is Freeware
+    Commercial Distribution Restricted                 
+    Copyright (C) 1995 by Mikael Bonnier, Lund, Sweden.
+ 
+ 
+1. System and Memory Requirements
+This program is for the TI-82. It consists of one main program and
+five subs that uses 736 bytes. It requires additionally 180 bytes for
+data to run.
+ 
+ROMAN uses or alters these variables:
+Real:   A,C,D,E,F,J,L,M,N,S,V,W
+ 
+ 
+2. Installation
+If you have TI-GRAPH LINK UUDecode this file, and send the resulting
+ROMAN.82G group file to the calculator. If you don't have a link you
+will have to enter the ASCII82P listings below.
+ 
+ 
+3. User Instructions
+Example:
+prgmROMAN [ENTER]
+ROMAN - (C) 1995
+ MIKAEL BONNIER
+  LUND, SWEDEN
+ArabIc=?1997 [ENTER]
+ArabIc:
+1997
+ROMAN 'LEGAL':
+MCMXCVII
+ROMAN MINIMAL:
+MVMII
+            Done 
+ 
+The roman symbols are:                _       _       _
+I=1, V=5, X=10, L=50, C=100, D=500, M=I=1000, V=5000, X=10000, etc.
+The symbols with one line above is worth 1000 times more than the
+ordinary. I have generalized this so that 5 million is written as a
+V with two lines above, the old romans didn't do this. Since this is 
+difficult to represent in text mode the program writes an equal sign
+before the symbol to signify one line above it, and two for two
+lines, etc. This is inspired from LaTeX, a mathematical text 
+processing program.
+ 
+Example:
+ArabIc:
+500000
+ROMAN 'LEGAL':
+=D
+ROMAN MINIMAL:
+=D
+ 
+A smaller symbol before a larger is subtracted from it and a same
+value or smaller after a larger symbol is added to it. To find
+the value of a roman numeral you may search from left for the
+largest symbol and then subtract the roman numeral that consists
+of the symbols to its left and add the roman numeral that consists
+of the symbols to its right. You find the sub roman numerals in the
+same way, until the sub roman numerals consists of zero symbols, that
+roman numeral has the value zero. This is a recursive algorithm.
+ 
+In the roman numerals that this program produces it is assumed that a
+sub roman numeral that is to be subtracted may only consist of a
+single symbol.
+ 
+The 'legal' roman numerals are the form that usually appears as the
+production year of movies.
+Example: 1995 = 1000 + 900 + 90 + 5 = M CM XC V.
+This can be written shorter as MVM = 1000 + (-5 + 1000).
+This short form wasn't used by the old romans.
+ 
+This program does not handle numbers larger than the integer
+precision of the calculator.
+ 
+ 
+4. Anecdotes
+The V in five comes from halving X (ten) horizontally, an upside down
+V was also used as a symbol for five (in the early days). D (500)
+comes from halving an older symbol for a thousand vertically namely
+O. I suppose M comes from 'Mille' (as in millenium = 1000 years).
+ 
+  
+ 
+Suggestions, improvements, bug, and bad-English-in-doc reports
+are always welcome to:
+                 Mikael Bonnier
+                 Osten Undens gata 88
+                 SE-227 62  LUND
+                 SWEDEN
+                             
+Or use my internet addresses:
+                 mikael.bonnier@gmail.com
+                 http://www.df.lth.se.orbin.se/~mikaelb/
+ 
+// Mikael Bonnier
+/////////////////////////////////////////////////////////////////////
+----begin ascii----
+\START82\
+\COMMENT=1995 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ROMAN
+\FILE=ROMAN.82P
+:Disp "ROMAN - (C) 1995"," MIKAEL BONNIER","  LUND, SWEDEN"
+:Input "ArabIc=?",V
+:iPart abs V\->\V
+:ClrHome
+:Disp "ArabIc:"
+:Output(2,1,V)
+:Disp "","ROMAN 'LEGAL':"
+:4\->\L
+:1\->\C
+:V\->\W
+:For(J,iPart log (W+\E\\(-)\99),0,\(-)\1)
+:iPart (W/\10^\J)*\10^\J\->\D
+:prgmZROMAN
+:W-D\->\W
+:End
+:17\->\C
+:prgmZNEWLINE
+:Output(L,1,"ROMAN MINIMAL:")
+:17\->\C
+:prgmZNEWLINE
+:V
+:prgmZROMAN
+:Disp ""
+\STOP82\
+\START82\
+\COMMENT=1995 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ZROMAN
+\FILE=ZROMAN.82P
+:Ans\->\N
+:While N
+:prgmZROMCEIL
+:Ans\->\S
+:S-N\->\A
+:If A>0
+:prgmZROMCEIL
+:Ans\->\E
+:If A>0 and S>2E
+:Then
+:E
+:prgmZROMPRN
+:S
+:prgmZROMPRN
+:N-(S-E)\->\N
+:Else
+:N
+:prgmZROMFLOR
+:Ans\->\S
+:prgmZROMPRN
+:N-S\->\N
+:End
+:End
+\STOP82\
+\START82\
+\COMMENT=1995 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ZROMCEIL
+\FILE=ZROMCEIL.82P
+:Ans\->\M
+:iPart log M\->\F
+:M
+:If M=\10^\F
+:Return
+:If M>5\10^\F
+:Then
+:10\10^\F
+:Else
+:5\10^\F
+:End
+\STOP82\
+\START82\
+\COMMENT=1995 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ZROMFLOR
+\FILE=ZROMFLOR.82P
+:Ans\->\M
+:iPart log M\->\F
+:If M\>=\5\10^\F
+:Then
+:5\10^\F
+:Else
+:\10^\F
+:End
+\STOP82\
+\START82\
+\COMMENT=1995 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ZROMPRN
+\FILE=ZROMPRN.82P
+:Ans\->\M
+:While M>1000
+:prgmZNEWLINE
+:Output(L,C,"=")
+:C+1\->\C
+:M/1000\->\M
+:End
+:prgmZNEWLINE
+:If M=1
+:Output(L,C,"I")
+:If M=5
+:Output(L,C,"V")
+:If M=10
+:Output(L,C,"X")
+:If M=50
+:Output(L,C,"L")
+:If M=100
+:Output(L,C,"C")
+:If M=500
+:Output(L,C,"D")
+:If M=1000
+:Output(L,C,"M")
+:C+1\->\C
+\STOP82\
+\START82\
+\COMMENT=1995 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ZNEWLINE
+\FILE=ZNEWLINE.82P
+:If C>16
+:Then
+:1\->\C
+:Disp ""
+:If L>7
+:7\->\L
+:L+1\->\L
+:End
+\STOP82\
+----begin uue----
+begin 664 ROMAN.82G
+M*BI423@R*BH:"@!'<F]U<&5D(&9I;&4@9&%T960@,#,O,#<O.34L(#$X.C,X
+M``````````#Z`@L`_P`%4D]-04X```#_`/T`WBI23TU!3BEQ*1!#$2DQ.3DU
+M*BLJ*4U)2T%%3"E"3TY.2452*BLJ*2E,54Y$*RE35T5$14XJ/]PJ06(28A9B
+M%TEB&&JO*BM6/[FR5@16/^$_WBI!8A)B%F(726(8/BH_X#(K,2M6$3_>*BHK
+M*E)/34%.*:Y,14=!3*X^*C\T!$P_,01#/U8$5S_32BNYP!!7<#NP.3D1*S`K
+ML#$1/[D05X/!2A&"P4H$1#]?6E)/34%./U=Q1`17/]0_,3<$0S]?6DY%5TQ)
+M3D4_X$PK,2LJ4D]-04XI34E.24U!3#XJ$3\Q-P1#/U]:3D573$E.13]6/U]:
+M4D]-04X_WBHJ/PL`(@`%6DY%5TQ)3D4B`"``SD-L,38_SS\Q!$,_WBHJ/\Y,
+M;#<_-P1,/TQP,01,/]0+`(``!5I23TU!3@``@`!^`'($3C_13C]?6E)/34-%
+M24P_<@13/U-Q3@1!/\Y!;#`_7UI23TU#14E,/W($13_.06PP0%-L,D4_SS]%
+M/U]:4D]-4%)./U,_7UI23TU04DX_3G$04W%%$01./]`_3C]?6E)/349,3U(_
+M<@13/U]:4D]-4%)./TYQ4P1./]0_U`L`*P`%6E)/34-%24PK`"D`<@1-/[G`
+M301&/TT_SDUJP48_U3_.36PUP48_SS\Q,,%&/]`_-<%&/]0+`"``!5I23TU&
+M3$]2(``>`'($33^YP$T$1C_.36XUP48_SS\UP48_T#_!1C_4/PL`M``%6E)/
+M35!23@"T`+(`<@1-/]%-;#$P,#`_7UI.15=,24Y%/^!,*T,K*FHJ$3]#<#$$
+M0S]-@S$P,#`$33_4/U]:3D573$E.13_.36HQ/^!,*T,K*DDJ$3_.36HU/^!,
+M*T,K*E8J$3_.36HQ,#_@3"M#*RI8*A$_SDUJ-3`_X$PK0RLJ3"H1/\Y-:C$P
+M,#_@3"M#*RI#*A$_SDUJ-3`P/^!,*T,K*D0J$3_.36HQ,#`P/^!,*T,K*DTJ
+)$3]#<#$$0U'B
+ 
+end
+----end uue----

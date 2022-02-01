@@ -1,0 +1,644 @@
+15 stats programs for TI-82. Some are pedagogical, eg. demonstrate the Central
+Limit Theorem.  Others replace statistical tables, do statistical graphing.
+----begin documentation----
+                      TI-82 Statistical Programs
+
+Michael Lloyd (lloydm@holly.hsu.edu)                Mar 1995
+
+This software is freeware.  I am in no responsible for any loss
+of money, data, or anything else from the use of these programs.
+
+documentation - table of contents
+ASCII - more detailed documentation and human-readable code
+UUE - TI-82 group file
+
+Program      Description
+=======      ===========
+CDF......... Graph an empirical cumulative distribution function
+CH12.........Area under a chi-squared probability density function
+CLT..........Demonstrate the Central Limit Theorem
+CONT.........Illustrate a discrete distribution converging to a
+             continuous distribution
+CUMU.........Cumulative frequency or distribution
+FLIP.........Simulate flipping a coin.  The relative frequency
+             converges to 1/2.
+FREQHIST.....Set the window and generate a frequency histogram
+GAMMA........Gamma function for half-integral values
+LSCI.........Compute and graph least squares confidence intervals
+NORMAL.......Find the area under a standard normal probability density
+TAREA........Area under the t-distribution 
+TMENU........Compute the critical value from a Student's t distribution
+TSUB.........Subroutine called by TMENU
+X2CRIT.......Finds the critical value for a chi-squared distribution
+ZVAL.........z value from normal distribution
+
+----end documentation----
+----begin ASCII----
+           Empirical Cumulative Distribution Function
+
+1. Put the data in L_1.
+2. Put the theoretical cdf in Y_1 if desired.
+3. Set the range values.
+
+The empirical cumulative distribution function is graphed.
+
+I = counter
+L_1 = data
+N = number of data
+
+\START82\
+\COMMENT=Cumulative Distribution Function          
+\NAME=CDF
+\FILE=cdf.82P
+0\->\Ymin:1\->\Ymax
+ClrDraw:PlotsOff 
+SortA(\L1\)
+dim \L1\\->\N
+Line(Xmin,0,\L1\(1),0)
+For(I,1,N-1,1)
+Line(\L1\(I),I/N,\L1\(I+1),I/N)
+End
+Line(\L1\(N),1,Xmax,1)
+\STOP82\
+=================================================================
+              Chi^2 Cumulative Distribution Function 
+
+A = degrees of freedom
+B = x value
+G = gamma function evaluated at A/2
+prgmGAMMA
+W = variable of integration
+
+Assume the random variable X is has the Chi squared distribution.
+Given the degrees of freedom r and x>0, then  P[X > x] is
+approximated.  Replace "1-Ans" in the program with "Ans" to
+approximate  P[X < x] instead.
+
+
+\START82\
+\COMMENT=Area for a chi squared distribution       
+\NAME=CHI2
+\FILE=chi2.82P
+Input "DF?",A
+Input "X?",B
+A/2\->\A
+prgmGAMMA
+B^Ae^\(-)\(B/2)
+Ans+fnInt(W^Ae^\(-)\(W/2),W,0,B,1)/2
+Ans/GA2^A
+Disp "AREA X->OO =",1-Ans
+\STOP82\
+=================================================================
+                       Central Limit Theorem
+
+The Central Limit Theorem is demonstrated.  Ninety-nine sample means
+from the uniform distribution on (0,1) of size N are stored into the
+list L_1.  A histogram is plotted along with a normal probability
+density function.
+
+J  counter for generating sample of means
+L_1 sample of sample means
+N  sample size (must be less than 100)
+X  counter for computing each sample mean, x-variable for normal pdf
+
+\START82\
+\COMMENT=Demonstrate the Central Limit Theorem     
+\NAME=CLT
+\FILE=clt.82P
+ClrHome
+FnOff :PlotsOff 
+\(-)\1\->\Xmin:2\->\Xmax
+.5\->\Xscl:.5\->\Yscl
+0\->\Ymin:2\->\Ymax
+Disp "DEMONSTRATE","CENTRAL LIMIT","THEOREM","
+Input "SAMPLE SIZE?",N
+ClrDraw
+DrawF (0<X)(X<1
+Text(0,0,"\x-bar\ IS BEING SAMPLED 99 TIMES
+Text(7,0,"FROM THE UNIFORM DISTRIB.
+Text(14,0,"SAMPLE SIZE =
+Text(14,47,N
+Text(28,26,1
+Text(55,65,1
+Text(43,36,"AREA=1
+\(-)\2.4\->\Xmin
+2.4\->\Xmax
+0\->\Ymin:25\->\Ymax
+.5\->\Xscl:5\->\Yscl
+For(J,1,99
+sum seq(rand,X,1,N,1)/N\->\\L1\(J
+End
+\sqrt\12N\->\A
+(\L1\-.5)A\->\\L1\
+Plot1(Histogram,\L1\,1
+Text(0,0,"DISTRIBUTION OF
+Text(0,53,"\x-bar\
+Text(0,65,"N=
+Text(0,75,N
+40/\sqrt\2\pi\\->\A
+Text(7,0,"WITH STANDARD NORMAL
+DrawF Ae^\(-)\(X\^2\/2
+\STOP82\
+======================================================================
+             Discrete distribution converges to continuous
+
+\START82\
+\COMMENT=Illustrate discrete dist -> cont distrib  
+\NAME=CONT
+\FILE=cont.82P
+"Xe^\(-)\X\->\\Y1\
+FnOff 
+0\->\Xmin:0\->\Xmax
+6\->\Xmax:.5\->\Ymax
+0\->\Xscl:0\->\Yscl
+For(I,2,5
+2^I\->\N
+Text(0,5,"N=
+Text(0,15,N
+6/N\->\W:0\->\B
+For(J,1,N
+B\->\A:A+W\->\B
+fnInt(\Y1\,X,A,B)/W\->\H
+Line(A,0,A,H
+Line(A,H,B,H
+Line(B,H,B,0
+End
+Pause :ClrDraw
+End
+Text(0,5,"N=OO
+DrawF \Y1\
+\STOP82\
+======================================================================
+                 Cumulative Frequency or Distribution
+
+L_6 is both the input and the output.  This list is replaced by the
+corresponding accumulated list.
+
+\START82\
+\COMMENT=Cumulative frequency or distribution      
+\NAME=CUMU
+\FILE=cumu.82P
+For(I,2,dim \L6\,1)
+\L6\(I-1)+\L6\(I)\->\\L6\(I)
+End
+\STOP82\
+======================================================================
+                           Flip a Fair Coin
+
+Simulate flipping a fair coin.  Two columns are generated; the left
+column is the number of experiments, and the right column is the
+relative frequency.  This relative frequency approaches P[head] = 1/2.
+
+\START82\
+\COMMENT=Simulate coin flip, rel. freq.-> 1/2      
+\NAME=FLIP
+\FILE=flip.82P
+Input "SEED?",A
+A\->\rand:0\->\A:0\->\N
+Lbl A
+A+int 2rand\->\A
+N+1\->\N
+Pause {N,A/N
+Goto A
+\STOP82\
+======================================================================
+                             Frequency Histogram
+
+Set the window and generate a frequency histogram
+
+A = lower class limit
+B = upper class limit
+C = number of classes
+F = largest frequency
+G = used to find F
+L = smallest datum
+L_5= frequency (optional)
+L_6= data
+M = largest datum
+N = cardinality of range
+U = unit of measure
+X = miscellaneous
+Xmin = smallest class boundary
+Xmax = largest class boundary
+Xscl = class width
+Y = counter
+Ymin = 0
+Ymax
+Yscl
+
+\START82\
+\COMMENT=Frequency Histogram                       
+\NAME=FREQHIST
+\FILE=freqhist.82P
+SortA(\L6\)
+dim \L6\\->\N
+N\->\dim \L5\
+Disp "FREQ IN \L5\?0=NO"
+Repeat X\<>\0
+getKey\->\X
+End
+If X=102
+Fill(1,\L5\)
+\L6\(1)\->\L
+\L6\(N)\->\M
+M-L\->\U
+For(X,2,N)
+\L6\(X)-\L6\(X-1)
+If Ans<U and Ans>0
+Ans\->\U
+End
+0\->\Ymin
+L-U/2\->\Xmin
+Menu("CHOOSE ONE","NO OF CLASSES",1,"CLASS WIDTH",2)
+Lbl 0
+Xmin+CXscl\->\Xmax
+0\->\F:Xmin\->\A
+For(X,1,C)
+A+Xscl\->\B:0\->\G
+For(Y,1,N)
+G+(\L6\(Y)>A and \L6\(Y)<B)\L5\(Y)\->\G
+End
+If G>F
+G\->\F
+B\->\A
+End
+Disp "MAX FREQ=",F
+Input "Ymax?",Ymax
+Input "Yscl?",Yscl
+FnOff 
+PlotsOff 
+Plot1(Histogram,\L6\,\L5\)
+PlotsOn 1
+DispGraph
+Stop
+Lbl 1
+Input "NO OF CLASSES?",C
+(M-L)/CU
+iPart Ans+(fPart Ans\<>\0)
+AnsU\->\Xscl
+Disp "CLASS WIDTH =",Ans
+Goto 0
+Lbl 2
+Input "CLASS WIDTH?",Xscl
+(M-L+U)/Xscl
+iPart Ans+(fPart Ans>0)\->\C
+Disp "NO OF CLASSES =",C
+Goto 0
+\STOP82\
+======================================================================
+                             Gamma Function
+
+A = half-integral positive number
+G = the gamma function evaluated at A
+X = counter
+
+\START82\
+\COMMENT=Gamma function for half-integral values   
+\NAME=GAMMA
+\FILE=gamma.82P
+If fPart A=0
+Then
+(A-1)!\->\G
+Else
+\sqrt\\pi\\->\G
+.5\->\X
+While X<A-.5
+XG\->\G
+X+1\->\X
+End
+End
+\STOP82\
+======================================================================
+                Confidence Band for Least Squares Line
+
+1. Put the data in two lists.
+2. Select the lists for two-variable statistics.
+3. SE is the standard error.
+4. C is the confidence level.
+5. X is the x value for prediction.
+6. Set window and graph to see confidence band.
+
+C = confidence level
+D = standard error
+K = degrees of freedom
+prgmTSUB
+X =  x value
+V = SS_x
+W = SS_y
+Y_1 = radius of confidence band
+Y_2 = lower limit of confidence band
+Y_3 = upper limit of confidence band
+Y_4 = least squares line
+
+\START82\
+\COMMENT=Least squares confidence intervals        
+\NAME=LSCI
+\FILE=lsci.82P
+LinReg(ax+b) 
+Sx\^2\n\->\V:Sy\^2\n\->\W
+\sqrt\((W-a\^2\V)/(n-2))\->\D
+Disp "SE=",D
+Input "C?",C
+n-2\->\K
+prgmTSUB
+"aX+b"\->\\Y4\
+"DT\sqrt\(1+n\^-1\+(X-\x-bar\)\^2\/V)"\->\\Y1\
+"\Y4\-\Y1\"\->\\Y2\
+"\Y4\+\Y1\"\->\\Y3\
+FnOff 1
+Lbl 1
+Input "X?",X
+Disp "PREDICTED Y",\Y4\
+Disp "C.I.:"
+Disp \Y2\,"TO",\Y3\
+Goto 1
+\STOP82\
+======================================================================
+                        Cumulative Normal Distribution
+
+Find the area from 0 to z under the standard normal probability
+density function.  I.e., if Z is a standard normally distributed
+random variable, then  P[0 < Z < z]  is approximated.
+
+\START82\
+\COMMENT=Find the area under standard normal 0->z  
+\NAME=NORMAL
+\FILE=normal.82P
+Fix 4
+Input "Z?",Z
+fnInt(e^\(-)\(X\^2\/2),X,0,Z
+Ans/\sqrt\2\pi\
+Disp "AREA (0->Z) =",Ans
+\STOP82\
+======================================================================
+                    Area under a t-distribution
+
+Assume that T is a random variable which has the t-distribution.
+If the degrees of freedom and a real number t are supplied, then
+P[T > t]  is approximated.  
+
+A = argument for the gamma function, exponent
+C = constant
+D = degrees of freedom
+prgmGAMMA = gamma function
+T = t value
+X = variable of integration
+
+\START82\
+\COMMENT=Area for the t distribution
+2\NAME=TAREA7
+\FILE=tarea.82P
+Fix 3
+Input "DF?",D
+Input "T?",T
+D/2\->\A
+prgmGAMMA
+G\->\C:(D+1)/2\->\A
+prgmGAMMA
+\(-)\A\->\A
+fnInt((1+X\^2\/D)^A,X,0,T)
+.5-AnsG/C\sqrt\D\pi\
+Disp "AREA(T->OO)=",Ans
+\STOP82\
+======================================================================
+                     Student's t Distribution Menu
+
+Approximate a critical t-value.
+
+A = tail area(s)
+C = confidence level
+K = degress of freedom
+prgmTSUB
+T = t value
+
+\START82\
+\COMMENT=Menu for Student's t distribution         
+\NAME=TMENU
+\FILE=tmenu.82P
+Fix 3
+Menu("STUDENTS DISTR.","1-TAIL TEST",3,"2-TAIL TEST",4,"CONF. INTERVAL"\#\
+,2)
+Lbl 2
+Input "C?",C
+Goto 5
+Lbl 3
+Input "A'?",A
+1-2A\->\C:Goto 5
+Lbl 4
+Input "A''?",A
+1-A\->\C
+Lbl 5
+Input "DF?",K
+prgmTSUB
+Disp "T=",T
+\STOP82\
+======================================================================
+                     Student's t Distribution Subroutine
+
+This program is used as a subroutine.
+
+A
+C = confidence level, miscellaneous 
+I = old integral
+J = new integral
+K = degress of freedom
+L = lower limit of integral
+prgmGAMMA
+T = critical t value
+U = upper limit of integral
+X = variable of integration
+
+\START82\
+\COMMENT=Subroutine called by TMENU                
+\NAME=TSUB
+\FILE=tsub.82P
+K/2\->\A
+prgmGAMMA
+GC\sqrt\K\pi\\->\C
+(K+1)/2\->\A
+prgmGAMMA
+C/2G\->\C
+"(1+X\^2\/K)^\(-)\A"\->\\Y0\
+FnOff 0
+0\->\J:0\->\T
+Repeat J>C
+T+1\->\T:J\->\I
+J+fnInt(\Y0\,X,T-1,T)\->\J
+End
+T\->\U
+T-(J-C)/(J-I)\->\T
+Repeat abs (T-U)<.0001
+U\->\L:T\->\U
+J+fnInt(\Y0\,X,L,U)\->\J
+U-(J-C)/\Y0\(U)\->\T
+End
+\STOP82\
+======================================================================
+             Critical Value for the Chi^2 Distribution
+
+Assume X is a Chi-squared random variable.  Given the tail area and the
+degrees of freedom, the critical value x is found so that P[ X > x ] =
+the tail area.
+
+A = degrees of freedom, miscellaneous
+C = tail area, miscellaneous
+G = gamma function at A/2
+prgmGAMMA
+I = old integral
+J = new integral
+L = lower limit of integral
+T = critical chi^2 value
+U = upper limit of integration
+X = variable of integration
+Y_0 = probability density function modulo constant
+
+\START82\
+\COMMENT=Finds the critical value for a chi^2 dist.
+\NAME=X2CRIT
+\FILE=x2crit.82P
+Fix 3
+Input "DF?",A
+Input "ALPHA?",C
+A/2\->\A
+prgmGAMMA
+(1-C)G2^A\->\C
+A-1\->\A
+"X^Ae^\(-)\(X/2)"\->\\Y0\
+FnOff 0
+0\->\J:0\->\T
+Repeat J>C
+T+1\->\T:J\->\I
+J+fnInt(\Y0\,X,T-1,T)\->\J
+End
+T\->\U
+T-(J-C)/(J-I)\->\T
+Repeat abs (T-U)<.0001
+U\->\L:T\->\U
+J+fnInt(\Y0\,X,L,U)\->\J
+U-(J-C)/\Y0\(U)\->\T
+End
+Disp "X\^2\ CRIT =",T
+\STOP82\
+======================================================================
+                Z Value from Standard Normal Distribution
+
+
+A = tail area(s)
+C = critical value
+I = F(u)
+L = lower limit of integration
+U = upper limit of integration
+X = integration variable
+Z = z value
+
+Given the tail area(s) or the confidence level, the program finds
+the critical z value.
+
+\START82\
+\COMMENT=z value from normal distribution          
+\NAME=ZVAL
+\FILE=zval.82P
+Fix 3
+Menu("Z VALUE","AREA 0 -> Z",1,"CONF. INTERVAL",2,"1 TAIL TEST",3,"2 TA\#\
+IL TEST",4)
+Lbl 2
+Input "C?",C
+C/2\->\A
+Goto 5
+Lbl 1
+Input "AREA?",A
+Goto 5
+Lbl 3
+Input "A'",A
+.5-A\->\A
+Goto 5
+Lbl 4
+Input "A''",A
+.5-A/2\->\A
+Lbl 5
+If A\<=\.34
+2.93A\->\Z
+If .34<A and A\<=\.48
+7.36A-1.51\->\Z
+If .48<A
+46.73A-20.3\->\Z
+0\->\U:0\->\I
+A\sqrt\2\pi\\->\A
+Repeat abs (Z-U)<.0001
+U\->\L:Z\->\U
+I+fnInt(e^\(-)\(X\^2\/2),X,L,U)\->\I
+U-(I-A)e^(U\^2\/2)\->\Z
+End
+Disp Z
+\STOP82\
+----end ASCII----
+----begin UUE----
+begin 664 STATS.82G
+M*BI423@R*BH:"@!'<F]U<&5D(&9I;&4@9&%T960@,#,O,C,O.34L(#$U.C,R
+M`$D^%QB+)``)"PL`7@`%0T1&``````!>`%P`,`1C##XQ!&,-/X4^ZC_C70`1
+M/[5=``1./YQC"BLP*UT`$#$1*S`1/]-)*S$K3G$Q*S$1/YQ=`!!)$2M)@TXK
+M70`027`Q$2M)@TX1/]0_G%T`$$X1*S$K8PLK,1$+`%\`!4-(23(`````7P!=
+M`-PJ1$:O*BM!/]PJ6*\J*T(_08,R!$$_7T=!34U!/T+P0;^P$$*#,A$_<G`D
+M5_!!O[`05X,R$2M7*S`K0BLQ$8,R/S%Q<H-'03+P03_>*D%214$I6'%L3T\I
+M:BHK<@L`L@$%0TQ4``````"R`;`!X3^7/NH_L#$$8PH^,@1C"S\Z-01C`CXZ
+M-01C`S\P!&,,/C($8PT_WBI$14U/3E-44D%412HK*D-%3E1204PI3$E-250J
+M*RI42$5/4D5-*BLJ/]PJ4T%-4$Q%*5-)6D6O*BM./X4_J1`P:U@1$%AK,3^3
+M,"LP*RIB`RE)4RE"14E.1RE304U03$5$*3DY*51)3453/Y,W*S`K*D923TTI
+M5$A%*55.249/4DTI1$E35%))0CH_DS$T*S`K*E-!35!,12E325I%*6H_DS$T
+M*S0W*TX_DS(X*S(V*S$_DS4U*S8U*S$_DS0S*S,V*RI!4D5!:C$_L#(Z-`1C
+M"C\R.C0$8PL_,`1C##XR-01C#3\Z-01C`CXU!&,#/]-**S$K.3D_MB.K*U@K
+M,2M.*S$1@TX$70`02C_4/[PQ,DX$03\070!Q.C41001=`#_L_"M=`"LQ/Y,P
+M*S`K*D1)4U1224)55$E/3BE/1C^3,"LU,RLJ8@,_DS`K-C4K*DYJ/Y,P*S<U
+M*TX_-#"#O#*L!$$_DS<K,"LJ5TE42"E35$%.1$%21"E.3U)-04P_J4&_L!!8
+M#8,R"P"E``5#3TY4`````*4`HP`J6+^P6`1>$#^7/S`$8PH^,`1C"S\V!&,+
+M/CHU!&,-/S`$8P(^,`1C`S_322LR*S4_,O!)!$X_DS`K-2LJ3FH_DS`K,34K
+M3C\V@TX$5SXP!$(_TTHK,2M./T($03Y!<%<$0C\D7A`K6"M!*T(1@U<$2#^<
+M02LP*T$K2#^<02M(*T(K2#^<0BM(*T(K,#_4/]@^A3_4/Y,P*S4K*DYJ3T\_
+MJ5X0"P`C``5#54U5`````",`(0#322LR*[5=!2LQ$3]=!1!)<3$1<%T%$$D1
+M!%T%$$D1/]0+`#0`!49,25``````-``R`-PJ4T5%1*\J*T$_002K/C`$03XP
+M!$X_UD$_07"Q,JL$03].<#$$3C_8"$XK08-./]=!"P#8`05&4D512$E35-@!
+MU@'C7041/[5=!01./TX$M5T$/]XJ1E)%42E)3BE=!*\P:DY/*C_26&\P/ZT$
+M6#_4/\Y8:C$P,C_B,2M=!!$_7040,1$$3#]=!1!.$01-/TUQ3`15/]-8*S(K
+M3A$_70406!%Q70406'$Q$3_.<FM50')L,#]R!%4_U#\P!&,,/TQQ58,R!&,*
+M/^8J0TA/3U-%*4].12HK*DY/*4]&*4-,05-315,J*S$K*D-,05-3*5=)1%1(
+M*BLR$3_6,#]C"G!#8P($8PL_,`1&/F,*!$$_TU@K,2M#$3]!<&,"!$(^,`1'
+M/]-9*S$K3A$_1W`0704061%L04!=!1!9$6M"$5T$$%D1!$<_U#_.1VQ&/T<$
+M1C]"!$$_U#_>*DU!6"E&4D51:BHK1C_<*F,-KRHK8PT_W"IC`Z\J*V,#/Y<_
+MZC_L_"M=!2M=!!$_Z3$_WS_9/]8Q/]PJ3D\I3T8I0TQ!4U-%4Z\J*T,_$$UQ
+M3!&#0U4_N7)P$+IR;S`1/W)5!&,"/]XJ0TQ!4U,I5TE$5$@I:BHK<C_7,#_6
+M,C_<*D-,05-3*5=)1%1(KRHK8P(_$$UQ3'!5$8-C`C^Y<G`0NG)L,!$$0S_>
+M*DY/*4]&*4-,05-315,I:BHK0S_7,`L`-0`%1T%-34$````U`#,`SKI!:C`_
+MSS\007$Q$2T$1S_0/[RL!$<_.C4$6#_16&M!<3HU/UA'!$<_6'`Q!%@_U#_4
+M"P"Z``5,4T-)`````+H`N`#_/V('#6("!%8^8A`-8@($5S^\$!!7<6(6#581
+M@Q!B`G$R$1$$1#_>*E-%:BHK1#_<*D.O*BM#/V("<3($2S]?5%-50C\J8A98
+M<&(7*@1>$S\J1%2\$#%P8@(,<!!8<6(#$0V#5A$J!%X0/RI>$W%>$"H$7A$_
+M*EX3<%X0*@1>$C^7,3_6,3_<*EBO*BM8/]XJ4%)%1$E#5$5$*5DJ*UX3/]XJ
+M0SI).CXJ/]Y>$2LJ5$\J*UX2/]<Q"P`U``5.3U)-04P``#4`,P!S-#_<*EJO
+M*BM:/R2_L!!8#8,R$2M8*S`K6C]R@[PRK#_>*D%214$I$#!Q;%H1*6HJ*W(+
+M`&P`!51!4D5!````;`!J`',S/]PJ1$:O*BM$/]PJ5*\J*U0_1(,R!$$_7T=!
+M34U!/T<$0SX01'`Q$8,R!$$_7T=!34U!/[!!!$$_)!`Q<%@-@T01\$$K6"LP
+M*U01/SHU<7)'@T.\1*P_WBI!4D5!$%1Q;$]/$6HJ*W(+`)P`!51-14Y5````
+MG`":`',S/^8J4U151$5.5%,I1$E35%(Z*BLJ,7%404E,*51%4U0J*S,K*C)Q
+M5$%)3"E415-4*BLT*RI#3TY&.BE)3E1%4E9!3"HK,A$_UC(_W"I#KRHK0S_7
+M-3_6,S_<*D&NKRHK03\Q<3)!!$,^US4_UC0_W"I!KJZO*BM!/S%Q001#/]8U
+M/]PJ1$:O*BM+/U]44U5"/]XJ5&HJ*U0+`+<`!51354(`````MP"U`$N#,@1!
+M/U]'04U-03]'0[Q+K`1#/Q!+<#$1@S($03]?1T%-34$_0X,R1P1#/RH0,7!8
+M#8-+$?"P02H$7AD_ES`_,`1*/C`$5#_22FQ#/U1P,014/DH$23]*<"1>&2M8
+M*U1Q,2M4$01*/]0_5`15/U1Q$$IQ0Q&#$$IQ21$$5#_2LA!4<541:SHP,#`Q
+M/U4$3#Y4!%4_2G`D7ADK6"M,*U41!$H_57$02G%#$8->&1!5$014/]0+`,\`
+M!5@R0U))5```SP#-`',S/]PJ1$:O*BM!/]PJ04Q02$&O*BM#/T&#,@1!/U]'
+M04U-03\0,7%#$4<R\$$$0S]!<3$$03\J6/!!O[`06(,R$2H$7AD_ES`_,`1*
+M/C`$5#_22FQ#/U1P,014/DH$23]*<"1>&2M8*U1Q,2M4$01*/]0_5`15/U1Q
+M$$IQ0Q&#$$IQ21$$5#_2LA!4<541:SHP,#`Q/U4$3#Y4!%4_2G`D7ADK6"M,
+M*U41!$H_57$02G%#$8->&1!5$014/]0_WBI8#2E#4DE4*6HJ*U0+`#,!!5I6
+M04P`````,P$Q`7,S/^8J6BE604Q512HK*D%214$I,"EQ;"E:*BLQ*RI#3TY&
+M.BE)3E1%4E9!3"HK,BLJ,2E404E,*51%4U0J*S,K*C(I5$%)3"E415-4*BLT
+M/]8R/]PJ0Z\J*T,_0X,R!$$_US4_UC$_W"I!4D5!KRHK03_7-3_6,S_<*D&N
+MKRHK03\Z-7%!!$$_US4_UC0_W"I!KJZO*BM!/SHU<4&#,@1!/]8U/\Y!;3HS
+M-#\R.CDS001:/\XZ,S1K04!!;3HT.#\W.C,V07$Q.C4Q!%H_SCHT.&M!/S0V
+M.C<S07$R,#HS!%H_,`15/C`$23]!O#*L!$$_TK(06G%5$6LZ,#`P,3]5!$P^
+M6@15/TEP)+^P$%@-@S(1*U@K3"M5!$D_57$027%!$;\050V#,@1:/]0_WEH_
+")@0`
+ 
+end
+----end UUE----

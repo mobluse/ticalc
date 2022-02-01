@@ -1,0 +1,100 @@
+A Mandelbrot set plotter for the TI-82. Runs in about 1 hour.
+ZOOMing is possible. Demonstrates 'End' problems.
+----begin documentation----
+
+    TOCCATA v1.0 is Freeware
+    Commercial Distribution Restricted
+    Copyright (C) 1994 by Mikael Bonnier, Lund, Sweden.
+
+1. System and Memory Requirements
+This program is for the TI-82. It consists of one main program,
+that uses 127 bytes. It requires an additional 60 bytes for data
+to execute.
+
+2. Installation
+If you have TI-GRAPH LINK UUDecode this file, and send the resulting
+TOCCATA.82P program to the calculator. If you don't have the 
+link you will have to enter the ASCII82P listing below. 
+
+4. User Instructions
+This is a small Mandelbrot set plotting program. The Mandelbrot set M,
+is the set of points c, in the complex plane so that z^2+c -> z doesn't
+go to infinity when iterated (z=0 initially).
+
+Since the TI-82 doesn't have complex arithmetic I have simplified
+    (U+iV)^2+(X+iY) -> U+iV,
+and separated the real and imaginary parts.
+
+Suggested WINDOW settings (you can use ZOOM and rerun the program
+afterwards) is:
+    Xmin=-4, Xmax=4, Ymin=-4*62/94, Ymax=4*62/94.
+With these settings it takes about one hour to run the program.
+
+This program alters N,T,U,V.
+
+5. Program Comments
+* The 'Vertical' instruction makes TOCCATA interesting to watch.
+* It is very difficult to use 'For(' for the inner loop since jumping
+over an 'End' causes a problem - the next encountered 'End' would 
+jump back to just after the 'For('. If TI should fix this, this
+program will not work as written. Notice this program has three 'End's
+but only two 'For's
+* The temporary variable 'T' is necessary.
+* 'If U\^2\+V\^2\>4', means that for this c value z will go to 
+infinity, this was proved by Pierre Fatou, 1905.
+* 'Pt-Off(X,Y)', the points not belonging to the set are turned off.
+
+
+Suggestions, bug and bad-English-in-doc reports are always welcome to:
+                    Mikael Bonnier
+                    Osten Undens gata 88
+                    SE-227 62  LUND
+                    SWEDEN
+                             
+Or use my internet addresses:
+                    mikael.bonnier@gmail.com
+                    http://www.df.lth.se.orbin.se/~mikaelb/
+
+// Mikael Bonnier
+/////////////////////////////////////////////////////////////////////
+----end documentation----
+----begin ASCII----
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=TOCCATA
+\FILE=TOCCATA.82P
+FnOff :AxesOff
+PlotsOff 
+ClrDraw
+DispGraph
+For(X,Xmin,Xmax,\Delta-x\)
+Vertical X
+For(Y,Ymin,Ymax,\Delta-y\)
+0\->\U
+0\->\V
+1\->\N
+Lbl N
+U\^2\-V\^2\+X\->\T
+2UV+Y\->\V
+T\->\U
+If U\^2\+V\^2\>4
+Goto X
+IS>(N,100)
+Goto N
+End
+Lbl X
+Pt-Off(X,Y)
+End
+End
+\STOP82\
+----end ASCII----
+----begin UUE----
+begin 644 TOCCATA.82P
+M*BI423@R*BH:"@`Q.3DT($UI:V%E;"!";VYN:65R+&UI:V%E;&)`9&8N;'1H
+M+G-E``````"$``L`=0`%5$]#0T%400!U`',`ESY^"3_J/X4_WS_36"MC"BMC
+M"RMC)A$_G5@_TUDK8PPK8PTK8R<1/S`$53\P!%8_,01./]9./U4-<58-<%@$
+M5#\R559P6016/U0$53_.50UP5@UL-#_76#_:3BLQ,#`1/]=./]0_UE@_GU@K
+)61$_U#_4/]LG
+`
+end
+----end UUE----

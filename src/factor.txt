@@ -1,0 +1,78 @@
+This program factors integers into prime components.
+----begin documentation----
+This 82u-file was prepared by Mikael Bonnier, http://www.df.lth.se.orbin.se/~mikaelb/.
+
+			 ****************************
+			 * FACTOR.82P for the TI-82 *
+			 ****************************
+
+ACKNOWLEDGMENT
+
+FACTOR.82P was written by John Powers of the TI Graphics Team and is
+released to the public domain.	You may copy and change this program.
+
+INTRODUCTION
+
+This program produces a list of the prime factors of a given
+integer.  The list is displayed in the form of factor/power pairs.
+
+HOW TO USE FACTOR
+
+Execute FACTOR to begin the program.  A prompt for the integer to
+factor then appears:
+
+  N=?
+
+Enter an integer.  The integer's factors are then displayed.
+
+For example, to factor 1584:
+
+  prgmFACTOR
+  N=?1584
+    {2 4 3 2 11 1}
+
+The factors of 1584 are 2^4 * 3^2 * 11.
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 05/26/93, 09:53
+\NAME=FACTOR
+\FILE=FACTOR.82P
+:0\->\dim \L1\
+:Prompt N
+:1\->\S
+:2\->\F
+:0\->\E
+:\sqrt\N\->\M
+:While F\<=\M
+:While fPart (N/F)=0
+:E+1\->\E
+:N/F\->\N
+:End
+:If E>0:Then
+:F\->\\L1\(S)
+:E\->\\L1\(S+1)
+:S+2\->\S
+:0\->\E
+:\sqrt\N\->\M
+:End
+:If F=2
+:Then:3\->\F
+:Else:F+2\->\F
+:End
+:End
+:If N\<>\1:Then
+:N\->\\L1\(S)
+:1\->\\L1\(S+1)
+:End
+:\L1\
+\STOP82\
+----begin uue----
+begin 644 FACTOR.82P
+M*BI423@R*BH:"@!0<F]G<F%M(&9I;&4@9&%T960@,#4O,C8O.3,L(#`Y.C4S
+M``"E02IE&KNF``L`EP`%1D%#5$]2``"7`)4`,`2U70`_W4X_,013/S($1C\P
+M!$4_O$X$33_11FU-/]&Z$$Z#1A%J,#]%<#$$13].@T8$3C_4/\Y%;#`^SS]&
+M!%T`$%,1/T4$70`04W`Q$3]3<#($4S\P!$4_O$X$33_4/\Y&:C(_SSXS!$8_
+MT#Y&<#($1C_4/]0_SDYO,3[//TX$70`04Q$_,01=`!!3<#$1/]0_70"&+P``
+`
+end
+----end uue----

@@ -1,0 +1,194 @@
+v1.0 of a practical complex number calculator for the TI-82.
+Menu-driven. ASCII listings included.
+----begin documentation----
+
+    COMPLEX v1.0 is Freeware
+    Commercial Distribution Restricted
+    Copyright (C) 1994 by Mikael Bonnier, Lund, Sweden.
+
+1. System and Memory Requirements
+This program is for the TI-82. It consists of one main- and one
+subprogram, and uses 652 bytes. It requires an additional 112
+bytes for data to execute.
+
+2. Installation
+If you have TI-GRAPH LINK UUDecode this file, and send the 
+resulting COMPLEX.82G group to the calculator. Two programs,
+COMPLEX and ZCOMPLEX, will be transfered. If you don't have the 
+link you will have to enter the two ASCII82P listings below. 
+
+4. User Instructions
+For a good popular introduction to complex numbers see "The 
+Emperor's New Mind", ch 3, by Roger Penrose.
+
+The complex numbers are simulated using lists: eg 2.3-i71, is
+displayed as {2.3 -71}.
+
+Before you start the program check your Radian or Degree mode, and
+select the preferred one (usually Radian).
+
+Start the program by entering: prgmCOMPLEX
+
+The main menu COMPLEX is displayed. First you must enter a complex 
+number, select 'ENTER...', a new menu is displayed, here you can 
+select 'RECTANGULAR' or 'POLAR' to enter a number in the selected form.
+You can not use 'RETRIEVE' yet because you have not 'STORE'd a number.
+
+When you have selected, you will be prompted to enter the real and 
+the imaginary part, or the absolute (also called modulus, or radius),
+and the argument (also called phase, or angle) if you selected the 
+polar form. The program then displays the rectangular form and 
+pauses, and you can use the arrow keys to view the number. When the 
+calculator is pausing the busy indicator is blinking, and you 
+continue by pressing ENTER. This version of COMPLEX is not stack 
+oriented, so if you enter several numbers only the last will be 
+remembered.
+
+Now you arrive at the main menu and you can select what you want to 
+do with your entered number, say you want to subtract a second
+number from it and divide the result by a third number. Select 
+'Ans-' and you come to the enter menu again, and enter the second
+number using the same technique as when you entered the first number. 
+The result of this calculation is diplayed. When you return to the
+main menu select 'Ans/' and enter your third number, and now the 
+result of the division is displayed.
+
+If you want to use unary operators like taking the absolute value 
+of a number then you should select 'UNARY...', in the unary menu you
+can also select to 'STORE' your number. After you have stored a number
+you may use 'RETRIEVE' in the enter menu, instead of entering the
+number by hand. A feature of the unary menu is that if you select a 
+calculation that results in a real number, say 'abs Ans' the result is 
+diplayed but the complex number is still held in Ans, so you can 
+follow this by 'ARG Ans' to get the argument of the complex number. 
+Another feature is that if you did not find the operation you were 
+looking for you can select Return.
+
+When you are finished you can select 'QUIT' and the last result is 
+displayed. You can resume calculation immediately by just pressing
+ENTER, even.
+
+5. Variables Used
+The program alters \L1\,\L2\,A,B,R,\@\ (theta), and Ans.
+'STORE' and 'RETRIEVE' uses \L1\.
+
+6. Possible Future Extensions
+Another unary function: 'ARGAND DIAG', that displays an Argand 
+diagram (also called complex plane), perhaps using Split mode.
+More unary operations eg '\sqrt\ Ans'.
+A stack to store complex numbers, so that it will be a Reverse 
+Polish Notation Complex Calculator.
+
+Suggestions, bug and bad-English-in-doc reports are always welcome to:
+                    Mikael Bonnier
+                    Osten Undens gata 88
+                    SE-227 62  LUND
+                    SWEDEN
+                             
+Or use my internet addresses:
+                    mikael.bonnier@gmail.com
+                    http://www.df.lth.se.orbin.se/~mikaelb/
+
+// Mikael Bonnier
+/////////////////////////////////////////////////////////////////////
+----end documentation----
+----begin ASCII----
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=COMPLEX
+\FILE=COMPLEX.82P
+Lbl 1
+Menu("COMPLEX","ENTER...",A,"Ans+",B,"Ans-",C,"Ans*",D,"Ans/",E,"UNARY.\#\
+..",F,"QUIT",Z)
+Lbl A
+prgmZCOMPLEX
+Pause {A,B}
+Goto 1
+Lbl B
+Disp "Ans+"
+Ans\->\\L2\
+prgmZCOMPLEX
+Pause \L2\+{A,B}
+Goto 1
+Lbl C
+Disp "Ans-"
+Ans\->\\L2\
+prgmZCOMPLEX
+Pause \L2\-{A,B}
+Goto 1
+Lbl D
+Disp "Ans*"
+Ans\->\\L2\
+prgmZCOMPLEX
+Pause {\L2\(1)A-\L2\(2)B,\L2\(1)B+\L2\(2)A}
+Goto 1
+Lbl E
+Disp "Ans/"
+Ans\->\\L2\
+prgmZCOMPLEX
+Pause {\L2\(1)A+\L2\(2)B,\L2\(2)A-\L2\(1)B}/(A\^2\+B\^2\)
+Goto 1
+Lbl F
+Menu("COMPLEX UNARY","abs Ans",I,"ARG Ans",J,"CONJUGATE Ans",K,"STORE",\#\
+L,"Return",1)
+Lbl I
+Disp "abs Ans",\R>Pr\(Ans(1),Ans(2))
+Pause 
+Goto 1
+Lbl J
+Disp "ARG Ans",\R>P@\(Ans(1),Ans(2))
+Pause 
+Goto 1
+Lbl K
+Disp "CONJUGATE Ans"
+Pause {Ans(1),\(-)\Ans(2)}
+Goto 1
+Lbl L
+Disp "STORE"
+Ans\->\\L1\
+Pause Ans
+Goto 1
+Lbl Z
+Ans
+\STOP82\
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ZCOMPLEX
+\FILE=ZCOMPLEX.82P
+Menu("COMPLEX ENTER","RECTANGULAR",R,"POLAR",P,"RETRIEVE",T)
+Lbl R
+Input "RE:",A
+Input "IM:",B
+Return
+Lbl P
+Input "abs :",R
+Input "ARG:",\@\
+\P>Rx\(R,\@\)\->\A
+\P>Ry\(R,\@\)\->\B
+Return
+Lbl T
+\L1\(1)\->\A
+\L1\(2)\->\B
+\STOP82\
+----end ASCII----
+----begin UUE----
+begin 644 COMPLEX.82G
+M*BI423@R*BH:"@`Q.3DT($UI:V%E;"!";VYN:65R+&UI:V%E;&)`9&8N;'1H
+M+G-E``````"1`@L`Z`$%0T]-4$Q%6`#H`>8!UC$_YBI#3TU03$58*BLJ14Y4
+M15(Z.CHJ*T$K*G)P*BM"*RIR<2HK0RLJ<H(J*T0K*G*#*BM%*RI53D%263HZ
+M.BHK1BLJ455)5"HK6A$_UD$_7UI#3TU03$58/]@(02M""3_7,3_60C_>*G)P
+M*C]R!%T!/U]:0T]-4$Q%6#_870%P"$$K0@D_US$_UD,_WBIR<2H_<@1=`3]?
+M6D-/35!,15@_V%T!<0A!*T()/]<Q/]9$/]XJ<H(J/W($70$_7UI#3TU03$58
+M/]@(70$0,1%!<5T!$#(10BM=`1`Q$4)P70$0,A%!"3_7,3_613_>*G*#*C]R
+M!%T!/U]:0T]-4$Q%6#_8"%T!$#$107!=`1`R$4(K70$0,A%!<5T!$#$10@F#
+M$$$-<$(-$3_7,3_61C_F*D-/35!,15@I54Y!4EDJ*RJR<BHK22LJ05)'*7(J
+M*THK*D-/3DI51T%412ER*BM+*RI35$]212HK3"LJU2HK,1$_UDD_WBJR<BHK
+M&W(0,1$K<A`R$1$_V#_7,3_62C_>*D%21RER*BL<<A`Q$2MR$#(1$3_8/]<Q
+M/]9+/]XJ0T].2E5'051%*7(J/]@(<A`Q$2NP<A`R$0D_US$_UDP_WBI35$]2
+M12H_<@1=`#_8<C_7,3_66C]R"P"+``5:0T]-4$Q%6(L`B0#F*D-/35!,15@I
+M14Y415(J*RI214-404Y'54Q!4BHK4BLJ4$],05(J*U`K*E)%5%))159%*BM4
+M$3_64C_<*E)%/BHK03_<*DE-/BHK0C_5/]90/]PJLCXJ*U(_W"I!4D<^*BM;
+G/QU2*UL1!$$_'E(K6Q$$0C_5/]94/UT`$#$1!$$_70`0,A$$0JR\
+`
+end
+----end UUE----

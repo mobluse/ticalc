@@ -1,0 +1,493 @@
+Nonlinear minimization; group contains NELDER.82P, NELDSORT.82P, TESTNELD.82P
+(example), ORBIT.82P (example), LOGISTIC.82P (example), FUNC.82P.
+----begin documentation----
+This 82u-file was prepared by Mikael Bonnier, http://www.df.lth.se.orbin.se/~mikaelb/.
+
+		     ******************************
+		     *	NELDER.82G for the TI-82  *
+		     ******************************
+
+ACKNOWLEDGEMENT
+
+NELDER.82G is a group file containing NELDER.82P, NELDSORT.82P, FUNC.82P, and
+the examples TESTNELD.82P, LOGISTIC.82P, and ORBIT.82P.  They were written by
+John Powers and C. B. Wilson of the TI Graphics Team and are released to the
+public domain.	You may copy and change these programs.  This version for the
+TI-82 is based on similar programs originally written for the TI-85 (also
+located in the SAMPLES directory of this disk).  Due to the more limited
+variables of the TI-82, the program is less obvious to read, so a mapping
+of variable names to the TI-85 program is provided later in this file.
+
+INTRODUCTION
+
+NELDER.82P and its associated subroutine NELDSORT.82P will minimize a
+non-linear (or linear) function with one or more parameters, using the
+Nelder-Mead simplex method.  Nonlinear optimization is a very valuable
+tool, especially for modeling and regression.  The Nelder-Mead method is
+one of the most robust and therefore very suitable for experimentation and
+use on a wide range of problems.  TESTNELD.82P, LOGISTIC.82P and ORBIT.82P
+are application examples for NELDER.82P.
+
+HOW TO USE NELDER
+
+You should provide a program named FUNC (this specific program name is
+required) which will compute a real value from your data and the current
+value of the parameters to be optimized and place this real value in
+variable F. Then execute NELDER, which will try to minimize the quantity
+returned in F.	The choice of function to minimize is up to you, but for
+example if you want least squares minimization you would compute the sum
+of the squares of the residuals in program FUNC.  You may store data in
+variable names of your choice, but the parameters to be optimized in
+your model must be in list L1.	Also NELDER uses the following variable
+names, which must not be used for other purposes:
+
+             REALS      LISTS                     MATRICES
+               N         L1 (for coefficients)      [D]
+               J         L5                         [E]
+               K         L6
+               L
+               T
+               F
+
+In addition to program FUNC, you may want to have a setup program which
+sets up data, stopping tolerance, etc., and then calls NELDER.  The example
+programs TESTNELD.82P, LOGISTIC.82P and ORBIT.82P are of this form.
+
+NELDER uses the value in variable T as a termination criterion.  The
+iterations stop when the "size" of the simplex (roughly the "distance"
+between vertices) is less than T.  At each iteration, NELDER displays
+the action taken on that iteration (REFLECT, EXPAND, CONTRACT or SHRINK),
+the loop count, a list representing the value of F at each vertex, and
+the value compared to T for termination.  There is no limit on loop
+count; you can break the program if it appears it is not going to converge.
+The most recent trial for L1 is averaged in [E](1,...) and the last actions
+stored in [E](5,...) for "reflection", [E](3,...) for "expansion",
+[E](2,...) for "contraction" and [E](4,...) for "shrink".  At the beginning
+of NELDER is a constant offset of 0.1 stored in L6(10).  This value is used
+to perturb your initial guess to form the simplex and initialize the
+process.  If you know your initial guess is much more accurate than 10%,
+you can prevent the program "opening up" the scale too much by reducing
+this value.  If you do this often, you can remove the assignment statement
+from NELDER and put it in a calling program.
+
+The example program TESTNELD.82P illustrates a simple use of NELDER. This
+example fits a series of Fibonacci numbers to an equation of the form F(n)=
+ae^(bn).  In the example program L1(1) is "a" and L1(2) is "b", the list L2
+is "n" and list L3 contains the exact Fibonacci sequence for the values of
+"n" in list L2.  The equation for F uses the sum of squared error as
+the minimization function.  To make the program FUNC more general, the
+model equation is stored in Y0.
+
+If you use L2={1,2,3,4,5,6,7,8,9,10}, L3={1,1,2,3,5,8,13,21,34,55} and 
+T=1e-5, you should get a least-squares error of .12339, L1(1)=.4480817 and
+L1(2)=.4810051.  This is a good example of why nonlinear minimization is
+required for accurate answers to tasks that are often treated in
+"linearized" form due to people not having tools like this NELDER program. 
+For instance, y=ae^(bx) can be linearized by ln(y)=ln(a) + bx and linear
+least-square methods used to obtain ln(a) (hence a) and b.  However, these
+values of a and b are biased by the fact that the sum of squares is
+minimized in ln(y) and not y. We can see this effect quickly in the TI-82
+by using exponential regression on the two lists above.  Since the
+exponential regression is y=ab^x (linearized as ln(y)=ln(a) + ln(b)*x), we
+just need to take the natural log of b as given by the TI-82 to have the a
+and b that we want.  For the data above, we obtain a=.488296 and b=.468948.
+Substituting these values for L1(1) and L1(2), we can run FUNC and look at
+F to see that the sum of squared error is 4.31 (vice 0.12). If we want an
+equation for calculating Fibonacci numbers: FIB=round(L1(1) e^(L1(2)*N),0),
+the coefficients we obtained using NELDER will return the correct integer
+values over the range of our data (and indeed up to N=14), while the
+coefficients from the linearized least squares approach only work up to
+N=8. In fact, if you try to fit the first 60 Fibonacci numbers with
+linearized least squares, your coefficients will result in a sum of squared
+error of 1.59e20.  Using these coefficients in the equation above only
+results in one additional correct Fibonacci number for N=9. But with
+NELDER, we can determine the coefficients L1(1)=.44721359550129 and
+L1(2)=.48121182505955, which result in a sum of squared error of 0.4407 and
+exact results for N from 1 to 60. (Note that to do this we will need to set
+the stopping tolerance T to 1E-11.)  The lesson here is that for accurate
+data modeling to nonlinear equations, you really have to use a nonlinear
+minimization tool.  While Nelder-Mead is not the fastest algorithm, it is
+very robust, doesn't need any derivative information, and isn't bothered too
+much by discontinuities or other messy function behavior.
+
+Note:  Just as an aside, it may be noted the ratio of successive
+Fibonacci numbers approaches the Golden mean (sqrt(5)-1)/2).  Based on this
+observation, we realize that the nth Fibonacci number should equal
+approximately  a*b^n; where a = 1/sqrt(5) and b = 2/(sqrt(5)-1).
+In the form we fit above therefore, L1(1)=1/sqrt(5) and
+L1(2)=ln(2/(sqrt(5)-1)).
+
+A second example LOGISTIC.82P, fits data on the time evolution of an
+algae sample taken in the Adriatic Sea to a logistic differential
+equation to model the dynamics of a one-species population in an
+environment with limited resources.  This example is taken from "Fitting
+a Logistic Curve to Data" in The College Mathematics Journal, Vol 24, No. 3,
+May 1993, pp 247-253. The model equation is m(t) = K / (1 + e^(-r(t - t0)),
+where m(t) is the biomass in square millimeters of surface covered by
+biomass in a microscope sample versus t in days.  The data are:
+
+    t      11     15     18     23    26   31   39    44   54   64    74
+  m(t) .00476  .0105  .0207  .0619  .337  .74  1.7  2.45  3.5  4.5  5.09
+
+We will assign coefficients: L1(1)=K, L1(2)=r, L1(3)=t0.  From a statplot,
+we note the curve asymtotically approaches an upper bound for large t, so
+we might guess K at 6.  We also note the curve has an inflection point near
+the center of the t range, so we might guess t0 at 40.	If we use these
+values in the equation at t=74, we can solve for r of about 0.05.  This
+gives us an initial guess of {6,.05,40}.  With T=.001, we get final
+coefficients of {5.095,.1213,45.775} and a sum of squared residuals of
+.23817.
+
+A third example, ORBIT.82P, fits data on variation in the period of pulsar
+PSR1257+12 over time.  This data is approximate and obtained from the graph
+shown in the announcement article, "A planetary system around the
+millisecond pulsar PSR1257+12", Nature, Vol. 355, 9 January 1992, pp
+145-147.  Another article covering this is "Pulsars, Planets and Pathos" in
+Sky & Telescope, May 1992, pp 493-495.  The data is contained within the
+program itself, as well as initial conditions for the optimization.  The
+program fits 7 parameters to an equation, which is the sum of two sinusoids
+and a constant.  Each sinusoid is described by an amplitude, a frequency
+and a phase.  The time data is in years (actual year - 1990) and the period
+data is in nanoseconds (actual period - 6,218,530 ns).  This problem is
+pretty complex for this method, which is better for five or less
+parameters, therefore the calculation time will be fairly long.  However,
+it is an example of a realistic scientific problem that students have not
+generally been equipped to solve.  From a sketch of the data points you can
+determine possible values for the amplitudes and periods.  For instance,
+one period seems to be about 0.2 year, so we would use 2*pi/0.2 = 31.4
+radians as a possible starting point.
+
+It is more difficult to make a close initial estimate of the phase angles
+and if we just start with arbitrary values, it may take several hundred
+iterations to get a result with tol=.001 or less.  Starting with the
+somewhat better initial estimate in the program {.94,35,-2,.67,23,3.2,3.4},
+setting the offset L6(10) in NELDER to 0.01 and tol=.01, you can get the
+following result in 49 iterations.
+
+               First term       Second term
+Amplitude        .93465           .66863
+Frequency      34.7047          23.0662
+Phase          -2.0036           3.2089
+Constant        3.3935
+
+Converting the two frequencies into days:
+  365.25 days * 2pi / 34.7047  =  66.1 days
+  365.25 days * 2pi / 23.0662  =  99.5 days
+
+As reported in the Nature article, it is believed that two planets are in
+orbit around this pulsar, having periods of 66.6 and 98.2 days. With
+assumptions about the mass of the pulsar and this data, calculations for
+the mass of these planets can also be made.
+
+If you want to see the equation and data together, one way is to do a
+Statplot with Xlist of L2 and Ylist of L3.  Use ZoomStat to get a window
+that covers the data.  Recall a copy of Y0 into another Y= equation and
+edit the two L2's into X's and graph this equation.
+
+References for the Nelder-Mead technique are:
+1. J. A. Nelder and R. Mead, "A Simplex method for function minimization",
+Computer Journal, vol. 7, pp 308-313, 1965.
+
+2. W. H. Press, B. P. Flannery, S. A. Teukolsky, W. T. Vetterling,
+"Numerical Recipes, The Art of Scientific Computing", Cambridge University
+Press, 1987, pp 305-309.
+
+Appendix:  Variable name correspondence between NELDER.82P and NELDER.85P.
+
+TI-85 variable name        TI-82 variable name
+
+X                          L1
+fv                         L5
+vertex                     [D]
+vavg                       [E](1,n)  where n equals number of coefficients
+vcon                       [E](2,n)
+vexp                       [E](3,n)
+vk                         [E](4,n)
+vref                       [E](5,n)
+vtemp                      [E](6,n)
+xi                         [E](7,n)
+swap                       [E](8,n)
+fk                         L6(1)
+cnt                        L6(2)
+test                       L6(3)
+s                          L6(4)
+fref                       L6(5)
+fexp                       L6(6)
+ftemp                      L6(7)
+fcon                       L6(8)
+how                        L6(9)
+offset                     L6(10)
+n9                         N
+j9                         J
+k9                         K
+FX                         F
+-----                      L  (additional loop index)
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:11
+\NAME=FUNC
+\FILE=FUNC.82P
+:sum (\Y0\-\L3\)\^2\\->\F
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:11
+\NAME=LOGISTIC
+\FILE=LOGISTIC.82P
+:"\L1\(1)/(1+e^(\(-)\\L1\(2)(\L2\-\L1\(3))))"\->\\Y0\
+:{11,15,18,23,26,31,39,44,54,64,74}\->\\L2\
+:{.00476,.0105,.0207,.0619,.337,.74,1.7,2.45,3.5,4.5,5.09}\->\\L3\
+:{6,.05,40}\->\\L1\
+:.001\->\T
+:Fix 3
+:prgmNELDER
+:Float
+:Disp \L1\
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:11
+\NAME=NELDER
+\FILE=NELDER.82P
+:10\->\dim \L6\
+:.1\->\\L6\(10)
+:dim \L1\\->\N
+:{N+1,N}\->\dim [D]
+:N+1\->\dim \L5\
+:{8,N}\->\dim [E]
+:For(L,1,N)
+:\L1\(L)\->\[E](7,L)
+:(1-\L6\(10))[E](7,L)\->\\L1\(L)
+:\L1\(L)\->\[D](N+1,L)
+:End
+:prgmFUNC
+:F\->\\L5\(N+1)
+:For(J,1,N)
+:For(L,1,N)
+:[E](7,L)\->\\L1\(L)
+:End
+:If \L1\(J)\<>\0
+:Then:(1+\L6\(10))\L1\(J)\->\\L1\(J)
+:Else:\L6\(10)\->\\L1\(J)
+:End
+:For(L,1,N)
+:\L1\(L)\->\[D](J,L)
+:End
+:prgmFUNC
+:F\->\\L5\(J)
+:End
+:prgmNELDSORT
+:ClrHome
+:1\->\\L6\(2)
+:Disp "INITIAL",\L6\(2),\L5\
+:Lbl A
+:0\->\\L6\(3)
+:For(J,2,N+1)
+:0\->\\L6\(4)
+:For(L,1,N)
+:([D](J,L)-[D](1,L))\^2\+\L6\(4)\->\\L6\(4)
+:End
+:\sqrt\(\L6\(4))\->\\L6\(4)
+:max(\L6\(3),\L6\(4))\->\\L6\(3)
+:End
+:If \L6\(3)\<=\T:Then
+:For(L,1,N)
+:[D](1,L)\->\\L1\(L)
+:End
+:Return
+:End
+:For(K,1,N)
+:0\->\\L6\(4)
+:For(J,1,N)
+:[D](J,K)+\L6\(4)\->\\L6\(4)
+:End
+:\L6\(4)/N\->\[E](1,K)
+:End
+:For(L,1,N)
+:2[E](1,L)-[D](N+1,L)\->\[E](5,L)
+:[E](5,L)\->\\L1\(L)
+:End
+:prgmFUNC
+:F\->\\L6\(5)
+:For(L,1,N)
+:[E](5,L)\->\[E](4,L)
+:End
+::\L6\(5)\->\\L6\(1)
+:1\->\\L6\(9)
+:If \L6\(5)<\L5\(N):Then
+:If \L6\(5)<\L5\(1):Then
+:For(L,1,N)
+:2[E](5,L)-[E](1,L)\->\[E](3,L)
+:[E](3,L)\->\\L1\(L)
+:End
+:prgmFUNC
+:F\->\\L6\(6)
+:If \L6\(6)<\L5\(1):Then
+:For(L,1,N)
+:[E](3,L)\->\[E](4,L)
+:End
+:\L6\(6)\->\\L6\(1)
+:2\->\\L6\(9)
+:End
+:End
+:Else
+:For(L,1,N)
+:[D](N+1,L)\->\[E](6,L)
+:End
+:\L5\(N+1)\->\\L6\(7)
+:If \L6\(5)<\L6\(7):Then
+:For(L,1,N)
+:[E](5,L)\->\[E](6,L)
+:End
+:End
+:For(L,1,N)
+:.5([E](6,L)+[E](1,L))\->\[E](2,L)
+:[E](2,L)\->\\L1\(L)
+:End
+:prgmFUNC
+:F\->\\L6\(8)
+:If \L6\(8)<\L5\(N):Then
+:For(L,1,N)
+:[E](2,L)\->\[E](4,L)
+:End
+::\L6\(8)\->\\L6\(1)
+:3\->\\L6\(9)
+:Else
+:For(J,2,N)
+:For(L,1,N)
+:([D](1,L)+[D](J,L))/2\->\[D](J,L)
+:[D](J,L)\->\\L1\(L)
+:End
+:prgmFUNC
+:F\->\\L5\(J)
+:End
+:For(L,1,N)
+:([D](1,L)+[D](N+1,L))/2\->\[E](4,L)
+:[E](4,L)\->\\L1\(L)
+:End
+:prgmFUNC
+:F\->\\L6\(1)
+:4\->\\L6\(9)
+:End
+:End
+:For(L,1,N)
+:[E](4,L)\->\[D](N+1,L)
+:End
+:\L6\(1)\->\\L5\(N+1)
+:prgmNELDSORT
+:\L6\(2)+1\->\\L6\(2)
+:If \L6\(9)=1
+:Disp "REFLECT"
+:If \L6\(9)=2
+:Disp "EXPAND"
+:If \L6\(9)=3
+:Disp "CONTRACT"
+:If \L6\(9)=4
+:Disp "SHRINK"
+:Disp \L6\(2),\L5\
+:Disp \L6\(3)
+:Goto A
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:11
+\NAME=NELDSORT
+\FILE=NELDSORT.82P
+:For(J,1,N)
+:For(K,J+1,N+1)
+:If \L5\(J)>\L5\(K):Then
+:\L5\(J)\->\L:\L5\(K)\->\\L5\(J):L\->\\L5\(K)
+:For(L,1,N)
+:[D](J,L)\->\[E](8,L):[D](K,L)\->\[D](J,L):[E](8,L)\->\[D](K,L)
+:End
+:End
+:End
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:11
+\NAME=ORBIT
+\FILE=ORBIT.82P
+:"\L1\(1)sin (\L1\(2)*\L2\+\L1\(3))+\L1\(4)sin (\L1\(5)*\L2\+\L1\(6))+\L1\\#\
+(7)"\->\\Y0\
+:{.538,.545,.572,.61,.642,.715,.797,.85,.957,.98,1.215,1.225,1.295,1.30\#\
+2,1.308,1.368,1.385,1.4,1.41,1.555,1.652,1.678,1.682,1.695,1.707,1.725,\#\
+1.765,1.8,1.85}\->\\L2\
+:{2.45,2.19,2.13,2.85,3.4,2.83,4.01,3.45,3.18,4.11,3.96,3.88,3.39,3.54,\#\
+3.62,4.28,3.9,3.44,3.12,4.94,2.24,2.58,2.72,3.02,3.48,3.85,3.9,3.4,3.62\#\
+}\->\\L3\
+:.01\->\T
+:{.94,35,\(-)\2,.67,23,3.2,3.4}\->\\L1\
+:Fix 3
+:prgmNELDER
+:Float
+:Disp \L1\
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:11
+\NAME=TESTNELD
+\FILE=TESTNELD.82P
+:"\L1\(1)e^(\L1\(2)\L2\)"\->\\Y0\
+:{1,2,3,4,5,6,7,8,9,10}\->\\L2\
+:{1,1,2,3,5,8,13,21,34,55}\->\\L3\
+:1\E\\(-)\5\->\T
+:{.447,.481}\->\\L1\
+:Fix 3
+:prgmNELDER
+:Float
+:Disp \L1\
+\STOP82\
+----begin uue----
+begin 644 NELDER.82G
+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
+2,S]?3D5,1$52/VD_WET`/Y+L
+`
+end
+----end uue----

@@ -1,0 +1,2417 @@
+Polynomial and rational functions study.
+----begin documentation----
+This 82u-file was prepared by Mikael Bonnier, http://www.df.lth.se.orbin.se/~mikaelb/.
+
+		       ******************************
+		       * POLFRAC.82G for the TI-82  *
+		       ******************************
+
+ACKNOWLEDGMENT
+
+POLFRAC.82G is a group file containing several programs written by Philippe
+Fortin of Nice, France and is released to the public domain.  You may copy
+and change these programs.							.
+
+INTRODUCTION
+
+This group of programs covers all the basic needs for polynomial and rational
+functions study :
+ - expanded form
+ - factoring
+ - derivative function
+ - roots
+ - sign study
+ - variations array
+ - simplification
+ - integration (polynomial function)
+ - asymptote (rational function)
+ 
+All these features are available from one single program, thanks to the
+'menu' TI-82 instruction.
+ 
+
+HOW TO USE POLFRAC
+
+The main program is AASTART
+ 
+All the other programs included in POLFRAC.82G are subprograms of AASTART:
+AAINI   initialize vars
+DEMO    demo program (you may use it alone,
+        or using the DEMO option of AASTART)
+POLxxxx progs are for P(x) study
+FRxxxx  progs are for P(x)/Q(x) study
+SPxxxx  progs are for displays of polynomials function, conversion to frac,
+        etc.
+PTxxxx  progs are used to display sign and variation arrays.
+ 
+1) DEMO
+ 
+First you may have a quick look at what may be done using the DEMO
+option of main program : You just need to run AASTART and choose 3:DEMO
+to do that.
+First you will get a study of P(x)=x^3-3x factorization and then
+a study of derivative function sign, and then array of variations.
+ 
+PAUSES IN PROGRAM
+ 
+ - Press ENTER each time you get a >>> display to go forward.
+ 
+ - When an array is displayed (variation array or sign array) you may
+ use cursor keys to move cursor on an interesting position of array to
+ get a more accurate value (variations array) or the expression of a
+ factor (sign array). When you have got all the info needed, just press
+ ENTER key to continue.
+ 
+ 
+2) POLYNOMIAL FUNCTIONS : run AASTART and select 1:P(X) option.
+ 
+This program mainly uses 3 polynomial functions P1, P2, P3.
+You may define P1 & P2 using DEF POLY option. You may also store results of
+polynomial computation (derivative, integral) in P1, P2 or P3.
+ 
+To define P1 or P2, there are two possibilities :
+ 
+- Input of degree and coef. using DEF P1 or DEF P2 options of DEF POLY menu
+ 
+- Expanding the polynomial expressions, stored in Y1 or Y2
+  BEFORE running AASTART, using Y1 -> P1 or Y2 -> P2 of DEF POLY menu.
+ 
+Let's look at two examples :
+ 
+EX. 1 : You want to get the derivative function of x^3-3x and then factor
+this derivative function.
+ 
+Run AASTART, select P(X), then select DEF POLY, and DEF P1. Enter degree (3)
+and coeff 1,0,-3, 0. Now you may use P1 !
+ 
+After the display of P1, you return to the polynomial main menu. Choose
+DERIVATIVE option, then polynomial P1, you will soon get the result.
+You may then store it in  P1, P2 or P3 using the STO menu.
+Let us choose P2.
+ 
+Back to the polynomial main menu you may now choose EQUATIONS, SIGN P2
+to get sign of derivative function.
+ 
+EX. 2 : Now you want to compute p(x)=(x-1)(x-2)-3x^2+3
+and then you want to study the variation of this function.
+ 
+Before running AASTART define this function in Y1 using [Y=] key.
+Y1=(X-1)(X-2)-3X^2+3
+Then run AASTART, choose P(X), DEF POLY, Y1 -> P1 and program start
+P(x) expanding. You will get P(X)=-2X^2-3X+5 and you will return to
+polynomial main menu. Then you may ask for function variation study using
+STUDY option. (You will get the derivative function, the sign of derivative,
+and the array of variation).
+ 
+3) RATIONAL FUNCTIONS : run AASTART and choose P(X)/Q(X)
+ 
+First you must define P and Q using DEF P, Q option. (You will have to
+enter degree and coeff).
+ 
+Then choose one of the other options of Rational functions main menu :
+SIGN	 : sign study of P/Q.
+DERIVE	 : compute the numerator P'Q-PQ' of derivative function. (denominator
+	   is Q^2, so no computation is needed).
+SIMPLIFY : for instance (x^2-1)/(x^2+x-2) simplifies to (x+1)/(x+2).
+VALUE	 : rational value in one point.
+STUDY	 : definition set, simplification, derivative, sign of derivative,
+           array of variation, asymptote.
+ 
+4) Conditions of use
+ 
+These programs are for educational use. They give a step by step
+solution of problems, using same methods as teachers and students :
+ 
+- Solving polynomial equation of degree 1 and 2
+ 
+- Solving polynomial equation of degree 4 without terms in X and X^3 :
+  ax^4+bx^2+c=0
+ 
+- Solving polynomial equations of degree 3, 4, 5, 6 when it is possible
+to get a solution A and then to factor (X-A) in P(X) in order to get
+a lower degree equation. In these cases, as students do, program will search
+for an obvious solution (-2,-1,0,1,2) and then, if not found, try to
+get one solution between -10 and 10 using numerical methods. It is the only
+part of these programs where numerical methods are used.
+ 
+You may use polynomial functions of degree less than or equal to 6.
+ 
+For P(x)/Q(x) you must make sure that the degree of intermediate results
+when computing derivative function will not exceed 6, so deg(P)+deg(Q) must
+be less than or equal to 7.
+ 
+In fact, we may say these programs are able to solve most of the problems
+that a student is suppose to solve with symbolic computation using
+real numbers.
+ 
+The only exception is the case of very tricky factoring process for high
+degree polynomial functions.
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=AAINI
+\FILE=AAINI.82P
+:FullScreen
+:StoreGDB GDB1
+:1\E\\(-)\9\->\\@\
+:"int (C/16)+2"\->\\Y7\
+:"C-int (C/16)*16+1"\->\\Y8\
+:Normal
+:Float
+:Radian
+:Func
+:Connected
+:Sequential
+:FnOff 
+:PlotsOff 
+:2\->\XFact
+:2\->\YFact
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=AASTART
+\FILE=AASTART.82P
+:prgmAAINI
+:Lbl 0
+:Menu("FUNCTIONS","P(X)",1,"P(X)/Q(X)",2,"DEMO",3,"QUIT",4)
+:Lbl 1
+:prgmPOLMENU
+:Goto 0
+:Lbl 2
+:prgmFRMENU
+:Goto 0
+:Lbl 3:prgmDEMO:Goto 0
+:
+:Lbl 4
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=DEMO
+\FILE=DEMO.82P
+:prgmAAINI
+:prgmPOLINILF
+:1\->\P
+:3\->\[B](1,1)
+:0\->\[A](1,1)
+:\(-)\3\->\[A](1,2)
+:0\->\[A](1,3)
+:1\->\[A](1,4)
+:prgmPOL1
+:ClrHome
+:1:prgmPOLSGNSP
+:FullScreen
+:ClrHome
+:Disp "STUDY OF"
+:Disp "P(X)=X^3-3X
+:prgmSP1
+:Disp "P1'"
+:1\->\I
+:3\->\J
+:prgmPOLDERSP
+:3:prgmPOLAFF
+:3:prgmPOLSGNSP
+:\L2\(3)\->\A
+:8\->\B
+:"\Y1\"\->\\Y0\
+:FnOff 
+:prgmPOLTABV
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRAFF
+\FILE=FRAFF.82P
+:ClrHome
+:Disp "P(X)=
+:\(-)\11\->\C
+:1:prgmSPAFP0
+:prgmSP1
+:Disp "Q(X)=
+:\(-)\11\->\C
+:2:prgmSPAFP0
+:prgmSP1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRASYMPT
+\FILE=FRASYMPT.82P
+:ClrHome
+:Disp "ASYMPTOTIC FUNC"
+:{1,7}:prgmPOLCOP
+:{2,10}:prgmPOLCOP
+:prgmPOLDSP
+:ClrHome
+:Disp "Y=
+:\(-)\14\->\C
+:8:prgmSPAFP0
+:prgmSP1S
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRDEF
+\FILE=FRDEF.82P
+:1\->\P
+:ClrHome
+:Disp "DEF. P"
+:prgmSP1
+:prgmPOLSAI
+:prgmPOL1
+:2\->\P
+:ClrHome
+:Disp "DEF. Q"
+:prgmSP1
+:prgmPOLSAI
+:prgmPOL2
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRDER
+\FILE=FRDER.82P
+:1\->\I
+:3\->\J
+:prgmPOLDERSP
+:2\->\I
+:4\->\J
+:prgmPOLDERSP
+:3\->\I
+:2\->\J
+:5\->\K
+:prgmPOLMUL
+:1\->\I
+:4\->\J
+:6\->\K
+:prgmPOLMUL
+:5\->\I
+:6\->\J
+:3\->\K
+:prgmPOLDIF
+:ClrHome
+:Disp "P'Q-PQ'="
+:3:prgmPOLAFF
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRDF
+\FILE=FRDF.82P
+:Disp "DOMAIN OF"
+:Disp "FUNCTION"
+:
+:{\(-)\1\E\12,1\E\12}\->\\L1\
+:{2,4}:prgmPOLCOP
+:2\->\P
+:ClrHome
+:Disp "SOLVING"
+:prgmPOLR
+:SortA(\L1\)
+:\L1\\->\\L2\
+:If dim \L1\=2
+:Then
+:Disp "D=R"
+:Else
+:Disp "D=R -
+:For(I,2,dim \L1\-1)
+:Disp \L1\(I)\>Frac\
+:Output(I,1,"X")
+:Output(I,2,I-1)
+:End
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRETUDE
+\FILE=FRETUDE.82P
+:prgmFRDF
+:prgmSP1
+:prgmPOLINILF
+:prgmFRSIMPL1
+:ClrHome
+:Disp "F'(X)"
+:prgmFRDER
+:ClrHome
+:Disp "ROOT(S) OF F'
+:{3,4}:prgmPOLCOP
+:prgmPOLR
+:ClrHome
+:Disp "SIGN OF F'
+:prgmPOLT1
+:3:prgmPOLT2
+:{2,11}:prgmPOLCOP:2\->\[B](11,2)
+:11:prgmPOLT2
+:prgmFRTQUO
+:prgmPOLTABS
+:"\Y1\/\Y2\"\->\\Y0\
+:FnOff 
+:prgmPOLTABV
+:prgmFRASYMPT
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRMENU
+\FILE=FRMENU.82P
+:1\->\P
+:"\Y1\/\Y2\"\->\\Y3\
+:prgmPOLINILF
+:Lbl A
+:FullScreen
+:ClrHome
+:Menu("P(X)/Q(X)","DEF P, Q",1,"SIGN",2,"DERIVE",3,"SIMPLIFY",4,"VALUE"\#\
+,5,"STUDY",6,"EXIT",7)
+:
+:Lbl 1:prgmFRDEF:Goto A
+:Lbl 2:prgmFRSGN:Goto A
+:Lbl 3:prgmFRDER:Goto A
+:Lbl 4:prgmFRSIMPL2:Goto A
+:Lbl 5:prgmFRVAL:Goto A
+:Lbl 6:prgmFRETUDE:Goto A
+:
+:Lbl 7:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRSGN
+\FILE=FRSGN.82P
+:prgmPOLINILF
+:{\(-)\1\E\12,1\E\12}\->\\L1\
+:{1,4}:prgmPOLCOP
+:1:prgmPOLMSG1
+:1\->\P
+:prgmPOLAFF
+:prgmPOLR
+:prgmPOLFACTO
+:
+:prgmPOLINILF
+:2\->\P
+:prgmPOLMSG1
+:2:prgmPOLAFF
+:{2,4}:prgmPOLCOP
+:prgmPOLR
+:prgmPOLFACTO
+:
+:
+:
+:prgmPOLT1
+:1:prgmPOLT2
+:2:prgmPOLT2
+:prgmFRTQUO
+:prgmPOLTABS
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRSIMPL1
+\FILE=FRSIMPL1.82P
+:ClrHome
+:Disp "SIMPLIFICATION
+:For(I,2,dim \L2\)
+:\L2\(I)\->\A
+:If abs \Y1\(A)<1\E\\(-)\10
+:Then
+:While (round(\Y1\(A),8)=0 and round(\Y2\(A),8)=0)
+:Disp A,\Y1\(A),\Y2\(A)
+:1:prgmPOLFACT1
+:prgmPOL1
+:2:prgmPOLFACT1
+:prgmPOL2
+:prgmFRAFF
+:End
+:End
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRSIMPL2
+\FILE=FRSIMPL2.82P
+:FullScreen
+:ClrHome
+:Disp "PGCD(P,Q)
+:{1,7}:prgmPOLCOP
+:{2,10}:prgmPOLCOP
+:prgmPOLPGCD
+:10:prgmPOLAFF
+:If [B](10,1)<1
+:Then
+:Disp "CANNOT"
+:Disp "SIMPLIFY"
+:prgmSP1
+:Return
+:End
+:Disp "P/PGCD(P,Q)
+:{10,5}:prgmPOLCOP
+:{1,7}:prgmPOLCOP
+:prgmPOLDSP
+:8:prgmPOLAFF
+:{8,1}:prgmPOLCOP
+:
+:Disp "Q/PGCD(P,Q)
+:{2,7}:prgmPOLCOP
+:{5,10}:prgmPOLCOP
+:prgmPOLDSP
+:8:prgmPOLAFF
+:{8,2}:prgmPOLCOP
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRTQUO
+\FILE=FRTQUO.82P
+:dim [C]
+:Ans(2)\->\A
+:{L,A}\->\dim [C]
+:100\->\[C](L,1)
+:4\->\[C](L,A)
+:For(K,2,A-1,2)
+:If [C](1,K)[C](2,K)>0
+:Then
+:1\->\[C](L,K)
+:Else
+:\(-)\1\->\[C](L,K)
+:End
+:End
+:For(K,3,A-2,2)
+:If round([C](2,K),8)\<>\0
+:Then
+:0\->\[C](L,K)
+:Else
+:3\->\[C](L,K)
+:End
+:End
+:L+1\->\L
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=FRVAL
+\FILE=FRVAL.82P
+:ClrHome
+:Prompt X
+:Pause \Y3\\>Frac\
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POL1
+\FILE=POL1.82P
+:If [B](1,1)\>=\1
+:Then
+:"sum seq([A](1,I)X^(I-1),I,2,[B](1,1)+1,1)+[A](1,1)"\->\\Y1\
+:Else
+:"[A](1,1)"\->\\Y1\
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POL2
+\FILE=POL2.82P
+:If [B](2,1)\>=\1
+:Then
+:"sum seq([A](2,I)X^(I-1),I,2,[B](2,1)+1,1)+[A](2,1)"\->\\Y2\
+:Else
+:"[A](2,1)"\->\\Y2\
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POL3
+\FILE=POL3.82P
+:If [B](3,1)\>=\1
+:Then
+:"sum seq([A](3,I)X^(I-1),I,2,[B](3,1)+1,1)+[A](3,1)"\->\\Y3\
+:Else
+:"[A](3,1)"\->\\Y3\
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLAFF
+\FILE=POLAFF.82P
+:Ans\->\X
+:0\->\C
+:X
+:prgmSPAFP0
+:prgmSP1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLAJOUT
+\FILE=POLAJOUT.82P
+:Disp "X=
+:Ans\->\X
+:Disp X\>Frac\
+:prgmSP1
+:If abs X>max(\L1\)
+:Stop
+:0\->\J
+:For(I,2,dim \L1\-1)
+:If abs (\L1\(I)-X)<1\E\\(-)\08
+:1\->\J
+:End
+:If J=0
+:Then
+:1+dim \L1\\->\dim \L1\
+:X\->\\L1\(Ans)
+:SortA(\L1\)
+:End
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLCHSEV
+\FILE=POLCHSEV.82P
+:ClrHome
+:Disp "OBVIOUS SOLUT.?"
+:10\->\A
+:"sum seq([A](4,I)X^(I-1),I,2,[B](4,1)+1,1)+[A](4,1)"\->\\Y6\
+:{\(-)\2,2,\(-)\1,1}\->\TblInput
+:For(J,1,4)
+:TblInput(J)\->\X
+:If round(\Y6\(X),8)=0:X\->\A
+:End
+:If A=10
+:Then
+:Disp "NO OBVIOUS SOL."
+:
+:Else
+:ClrHome
+:End
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLCHSOL
+\FILE=POLCHSOL.82P
+:[A](4,4)\->\A
+:[A](4,3)\->\I
+:[A](4,2)\->\J
+:[A](4,1)\->\K
+:"AX^3+IX\^2\+JX+K"\->\\Y6\
+:
+:FnOff 
+:ClrDraw
+:Split
+:ZStandard
+:\(-)\1\->\Ymin
+:1\->\Ymax
+:AxesOff
+:ClrHome
+:Disp "CONSTRUCTION 
+:Disp "OF P....
+:Output(2,5,P)
+:Horizontal 0
+:DrawF \Y6\
+:ClrHome
+:Disp "MOVE CURSOR TO"
+:Disp "INTERSECT. POINT"
+:Input 
+:solve(\Y6\,X,X)\->\A
+:FullScreen
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLCHX
+\FILE=POLCHX.82P
+:Lbl A
+:Menu("CHOOSE POLY","P1",1,"P2",2,"P3",3)
+:Lbl 1:1\->\P:Goto B
+:Lbl 2:2\->\P:Goto B
+:Lbl 3:3\->\P:Goto B
+:Lbl B:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLCLR
+\FILE=POLCLR.82P
+:Ans\->\X
+:\(-)\1\->\[B](X,1)
+:*row(0,[A],X)\->\[A]
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLCOP
+\FILE=POLCOP.82P
+:Ans\->\\L6\
+:dim [A]
+:Ans(2)\->\Y
+:For(X,1,Y)
+:[A](\L6\(1),X)\->\[A](\L6\(2),X)
+:End
+:
+:[B](\L6\(1),1)\->\[B](\L6\(2),1)
+:If \L6\(2)>3
+:Return
+:If \L6\(2)=1:prgmPOL1
+:If \L6\(2)=2:prgmPOL2
+:If \L6\(2)=3:prgmPOL3
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLDEF
+\FILE=POLDEF.82P
+:Menu("DEF POLY","DEF P1",C,"DEF P2",D,"DEV \Y1\ -> P1",A,"DEV \Y2\ -> \#\
+P2",B,"EXIT",E)
+:Lbl A
+:"\Y1\"\->\\Y9\
+:1:prgmPOLDEV
+:Return
+:Lbl B
+:"\Y2\"\->\\Y9\
+:2:prgmPOLDEV
+:Return
+:Lbl C
+:1:prgmPOLSAI
+:prgmPOL1
+:Return
+:Lbl D
+:2:prgmPOLSAI
+:prgmPOL2
+:Return
+:Lbl E
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLDER
+\FILE=POLDER.82P
+:prgmPOLCHX
+:ClrHome
+:P\->\I
+:10\->\J
+:prgmPOLDERSP
+:Disp "P.'"
+:Output(1,2,P)
+:10:prgmPOLAFF
+:prgmPOLMEMO
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLDERSP
+\FILE=POLDERSP.82P
+:J:prgmPOLCLR
+:If [B](I,1)\<=\0
+:Return
+:For(L,1,[B](I,1))
+:L*[A](I,L+1)\->\[A](J,L)
+:End
+:[B](I,1)-1\->\[B](J,1)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLDEV
+\FILE=POLDEV.82P
+:Ans\->\P
+:ClrHome
+:
+:{\(-)\1.5,\(-)\1,\(-)\0.5,0.5,1,1.5,0}\->\\L6\
+:{10,10}\->\dim [A]
+:{10,1}\->\dim [B]
+:{7,1}\->\dim [D]
+:{7,7}\->\dim [E]
+:For(I,1,6)
+:For(J,1,6)
+:\L6\(I)^(7-J)\->\[E](I,J)
+:End
+:Output(8,I,".")
+:End
+:
+:For(I,1,7)
+:0\->\[E](7,I):1\->\[E](I,7)
+:\Y9\(\L6\(I))\->\[D](I,1)
+:Output(8,6+I,".")
+:End
+:
+:[E]\^-1\*[D]\->\[D]
+:
+:P:prgmPOLCLR
+:For(I,7,1,\(-)\1)
+:[D](I,1)\->\X
+:If fPart round(X,8)=0
+:round(X,8)\->\X
+:If X\<>\0
+:7-I\->\[B](P,1)
+:X\->\[A](P,8-I)
+:End
+:{1,1}\->\dim [E]
+:{1,1}\->\dim [D]
+:ClrHome
+:Disp "P(X)="
+:\(-)\11\->\C
+:P:prgmSPAFP0
+:prgmSP1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLDIF
+\FILE=POLDIF.82P
+:K:prgmPOLCLR
+:For(L,1,max([B](I,1),[B](J,1))+1
+:[A](I,L)-[A](J,L)\->\[A](K,L)
+:If Ans\<>\0
+:L-1\->\[B](K,1)
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLDSP
+\FILE=POLDSP.82P
+:8:prgmPOLCLR
+:9:prgmPOLCLR
+:[B](7,1)+1\->\A
+:[B](10,1)+1\->\B
+:If A<B
+:Then
+:8:prgmPOLCLR
+:Else
+:If B=1 and [A](10,1)\<>\0
+:Then
+:8:prgmPOLCLR
+:*row+(1/[A](10,1),[A],7,8)\->\[A]
+:7:prgmPOLCLR
+:1\->\A
+:Else
+:8:prgmPOLCLR
+:A-B\->\[B](8,1)
+:B-1\->\[B](9,1)
+:While A\>=\B
+:9:prgmPOLCLR
+:[A](7,A)/[A](10,B)
+:*row+(Ans,[A],10,9)\->\[A]
+:[B](10,1)\->\[B](9,1)
+:[A](7,A)/[A](10,B)\->\[A](8,A-B+1)
+:For(K,B,1,\(-)\1)
+:[A](7,A-B+K)-[A](9,K)\->\[A](7,A-B+K)
+:End
+:A-1\->\A
+:End
+:End
+:End
+:7:prgmPOLNOR
+:8:prgmPOLNOR
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLEQU
+\FILE=POLEQU.82P
+:Lbl A
+:Menu("EQUATIONS","P1=0",1,"P2=0",2,"P1=P2",3,"SIGN OF P1",4,"SIGN OF P\#\
+2",5,"SIGN OF P1-P2",6,"EXIT",7)
+:Lbl 1
+:1:prgmPOLRAC
+:Return
+:Lbl 2
+:2:prgmPOLRAC
+:Return
+:Lbl 3
+:ClrHome
+:\(-)\16\->\C
+:1:prgmSPAFP0
+:Output(\Y7\,\Y8\,"=")
+:C+1\->\C
+:2:prgmSPAFP0
+:prgmSP1
+:1\->\I:2\->\J:3\->\K
+:prgmPOLDIF
+:3:prgmPOLRAC
+:Return
+:Lbl 4
+:1:prgmPOLSGNSP
+:Return
+:Lbl 5
+:2:prgmPOLSGNSP
+:Return
+:Lbl 6
+:1\->\I
+:2\->\J
+:3\->\K
+:prgmPOLDIF
+:3:prgmPOLSGNSP
+:Return
+:Lbl 7
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLETUDE
+\FILE=POLETUDE.82P
+:prgmPOLCHX
+:If P>2:Return
+:
+:FullScreen
+:ClrHome
+:Disp "P.'"
+:Output(1,2,P)
+:P\->\I
+:3\->\J
+:prgmPOLDERSP
+:3:prgmPOLAFF
+:3:prgmPOLSGNSP:prgmPOL3
+:\L2\(3)\->\A
+:8\->\B
+:If P=1
+:"\Y1\"\->\\Y0\
+:If P=2
+:"\Y2\"\->\\Y0\
+:FnOff 
+:prgmPOLTABV
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLFACT1
+\FILE=POLFACT1.82P
+:Ans\->\K
+:ClrHome
+:Disp "FACTOR"
+:Disp "X-a=X"
+:If A\<>\0
+:Then
+:5\->\C:0\->\J:\(-)\A:prgmSPAFC
+:End
+:8:prgmPOLCLR
+:[B](K,1)\->\J
+:J-1\->\[B](8,1)
+:[A](K,J+1)\->\[A](8,J)
+:For(I,J-1,1,\(-)\1)
+:[A](K,I+1)+A[A](8,I+1)\->\X
+:If abs X<1\E\\(-)\10
+:Then
+:0\->\[A](8,I)
+:Else
+:X\->\[A](8,I)
+:End
+:End
+:{8,K}:prgmPOLCOP
+:A:prgmPOLMF2
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLFACT2
+\FILE=POLFACT2.82P
+:Ans\->\K
+:1\->\I
+:While [A](K,I)=0
+:I+1\->\I
+:End
+:I-1\->\I
+:ClrHome
+:Disp "FACTOR"
+:Disp "   X"
+:If I>1
+:Then
+:Output(2,5,"^")
+:Output(2,6,I)
+:End
+:prgmSP2
+:[B](K,1)-I\->\[B](K,1)
+:For(J,1,[B](K,1)+1)
+:[A](K,J+I)\->\[A](K,J)
+:End
+:I:prgmPOLMF3
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLFACTO
+\FILE=POLFACTO.82P
+:FullScreen
+:ClrHome
+:Disp "FACTORIZATION
+:0\->\C
+:If [A](11,1)\<>\0 and round([A](11,1),8)\<>\1
+:Then
+:1\->\F
+:11:prgmSPAFP0
+:End
+:
+:For(I,12,16)
+:If [B](I,1)\<>\0
+:Then
+:Output(\Y7\,\Y8\,"(")
+:C+1\->\C:1\->\F
+:I:prgmSPAFP0
+:Output(\Y7\,\Y8\,")")
+:C+1\->\C
+:If [B](I,2)=2
+:Then
+:Output(\Y7\,\Y8\,"\^2\")
+:C+1\->\C
+:End
+:If [B](I,2)>2
+:Then
+:Output(\Y7\,\Y8\,"^")
+:C+1\->\C
+:Output(\Y7\,\Y8\,[B](I,2)
+:C+1\->\C
+:End
+:End
+:End
+:prgmSP1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLINILF
+\FILE=POLINILF.82P
+:{10,7}\->\dim [A]
+:{16,7}\->\dim [A]
+:{10,1}\->\dim [B]
+:{16,2}\->\dim [B]
+:For(I,1,16)
+:1\->\[B](I,2)
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMEMO
+\FILE=POLMEMO.82P
+:Lbl A
+:FullScreen
+:ClrHome
+:Menu("STO TO","P1",1,"P2",2,"P3",3,"EXIT",4)
+:Lbl 1:1\->\I:Goto B
+:Lbl 2:2\->\I:Goto B
+:Lbl 3:3\->\I:Goto B
+:Lbl 4:Return
+:Lbl B
+:{10,I}
+:prgmPOLCOP
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMENU
+\FILE=POLMENU.82P
+:{10,7}\->\dim [A]
+:{15,7}\->\dim [A]
+:{10,1}\->\dim [B]
+:{15,1}\->\dim [B]
+:1\->\P
+:Lbl A
+:FullScreen
+:ClrHome
+:Menu("P(X)","DEF POLY",1,"EQUATIONS",2,"DERIVATIVE",3,"INTEGRAL",4,"VA\#\
+LUE",5,"STUDY",6,"EXIT",7)
+:
+:Lbl 1:prgmPOLDEF:Goto A
+:Lbl 2:prgmPOLEQU:Goto A
+:Lbl 3:prgmPOLDER:Goto A
+:Lbl 4:prgmPOLPRI:Goto A
+:Lbl 5:prgmPOLVAL:Goto A
+:Lbl 6:prgmPOLETUDE:Goto A
+:Lbl 7:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMF1
+\FILE=POLMF1.82P
+:Ans\->\I
+:11\->\J
+:Repeat [B](J,1)=0
+:1+J\->\J
+:End
+:{I,J}:prgmPOLCOP
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMF2
+\FILE=POLMF2.82P
+:Ans\->\I
+:11\->\J
+:Repeat [B](J,1)=0 or ([A](J,2)=1 and [A](J,1)=\(-)\I and [B](J,1)=1)
+:1+J\->\J
+:End
+:If [B](J,1)=0
+:Then
+:1\->\[A](J,2)
+:\(-)\I\->\[A](J,1)
+:1\->\[B](J,1)
+:Else
+:[B](J,2)+1\->\[B](J,2)
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMF3
+\FILE=POLMF3.82P
+:Ans\->\I
+:11\->\J
+:Repeat [B](J,1)=0
+:J+1\->\J
+:End
+:I\->\[B](J,1)
+:1\->\[A](J,I+1)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMF4
+\FILE=POLMF4.82P
+:Ans\->\I
+:If [A](11,1)=0
+:Then
+:I\->\[A](11,1)
+:Else
+:[A](11,1)I\->\[A](11,1)
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMF5
+\FILE=POLMF5.82P
+:Ans\->\I
+:11\->\J
+:Repeat [B](J,1)=0
+:1+J\->\J
+:End
+:1\->\[A](J,3)
+:0\->\[A](J,2)
+:\(-)\I\->\[A](J,1)
+:2\->\[B](J,1)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMSG1
+\FILE=POLMSG1.82P
+:ClrHome
+:Disp "ROOT(S) OF P"
+:Output(1,13,Ans)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLMUL
+\FILE=POLMUL.82P
+:K:prgmPOLCLR
+:[B](I,1)\->\X
+:[B](J,1)\->\Y
+:If X<0 or Y<0
+:Return
+:X+Y\->\[B](K,1)
+:Ans\->\Z
+:For(L,1,Z+1)
+:sum seq([A](I,M+1)[A](J,L-M),M,max(0,L-1-Y),min(L-1,X),1)\->\[A](K,L)
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLNOR
+\FILE=POLNOR.82P
+:Ans\->\X
+:\(-)\1\->\[B](X,1)
+:dim [A]\->\\L6\
+:For(Y,1,\L6\(2))
+:If abs [A](X,Y)<1\E\\(-)\10
+:Then
+:0\->\[A](X,Y)
+:Else
+:Y-1\->\[B](X,1)
+:End
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLPGCD
+\FILE=POLPGCD.82P
+:prgmPOLDSP
+:If [B](7,1)\<>\\(-)\1
+:Then
+:While [B](7,1)\>=\0
+:rowSwap([A],7,10)\->\[A]
+:rowSwap([B],7,10)\->\[B]
+:prgmPOLDSP
+:End
+:End
+:*row(1/[A](10,[B](10,1)+1),[A],10)\->\[A]
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLPRI
+\FILE=POLPRI.82P
+:prgmPOLCHX
+:ClrHome
+:P\->\I
+:10\->\J
+:prgmPOLPRISP
+:Disp "INTEGRAL P"
+:Output(1,11,P)
+:10:prgmPOLAFF
+:prgmPOLMEMO
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLPRISP
+\FILE=POLPRISP.82P
+:J:prgmPOLCLR
+:If [B](I,1)<0
+:Return
+:For(L,2,[B](I,1)+2)
+:[A](I,L-1)/(L-1)\->\[A](J,L)
+:End
+:[B](I,1)+1\->\[B](J,1)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR
+\FILE=POLR.82P
+:0\->\C
+:Disp "
+:Disp "
+:4:prgmSPAFP0
+:Output(\Y7\,\Y8\,"=0")
+:prgmSP1
+:[B](4,1)\->\D
+:If D=\(-)\1
+:Then
+:Disp "S=R"
+:Stop
+:End
+:If D=0
+:Then
+:Disp "NO SOLUTION"
+:[A](4,1):prgmPOLMF4
+:prgmSP2
+:Return
+:End
+:If D=1
+:Then
+:prgmPOLR1
+:Return
+:End
+:
+:If [A](4,1)=0
+:Then
+:prgmPOLR0
+:Return
+:End
+:
+:If D=2
+:Then
+:prgmPOLR2
+:Return
+:End
+:
+:If D=4 and abs [A](4,2)+abs [A](4,4)<1\E\\(-)\8
+:Then
+:prgmPOLR5
+:Return
+:End
+:
+:prgmPOLCHSEV
+:If A<3
+:Then
+:prgmPOLR4
+:Return
+:End
+:
+:If D=3
+:Then
+:prgmPOLR3
+:Return
+:End
+:
+:ClrHome
+:Disp "FAIL"
+:Stop
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR0
+\FILE=POLR0.82P
+:ClrHome
+:Disp "OBVIOUS SOL.
+:0:prgmPOLAJOUT
+:4:prgmPOLFACT2
+:ClrHome
+:If [B](4,1)=0
+:Then
+:[A](4,1):prgmPOLMF4
+:Return
+:Else
+:4:prgmPOLR
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR1
+\FILE=POLR1.82P
+:4:prgmPOLMF1
+:ClrHome
+:Disp "DEGREE=1, X=\(-)\B/A
+:\(-)\[A](4,1)/[A](4,2)
+:
+:prgmPOLAJOUT
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR2
+\FILE=POLR2.82P
+:For(A,1,100):End
+:ClrHome
+:Disp "DEGREE=2
+:[A](4,1)\->\C
+:[A](4,2)\->\B
+:[A](4,3)\->\A
+:(B\^2\-4AC)\->\D
+:Disp "DISCR=
+:Disp D\>Frac\
+:If D<0
+:Then
+:Disp "NO SOLUTION
+:prgmSP1
+:4:prgmPOLMF1
+:Return
+:End
+:
+:If D=0
+:Then
+:Disp "X=-B/2A"
+:\(-)\B/(2A)
+:prgmPOLAJOUT
+:X:prgmPOLMF2
+:X:prgmPOLMF2
+:A:prgmPOLMF4
+:Return
+:End
+:
+:Disp "DISCR>0
+:Disp "1/ X=(-B-\sqrt\D)/2A
+:(\(-)\B-\sqrt\D)/(2A)
+:prgmPOLAJOUT
+:X:prgmPOLMF2
+:Disp "2/ X=(-B+\sqrt\D)/2A
+:(\(-)\B+\sqrt\D)/(2A)
+:prgmPOLAJOUT
+:X:prgmPOLMF2
+:A:prgmPOLMF4
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR3
+\FILE=POLR3.82P
+:prgmPOLCHSOL
+:prgmPOLR4
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR4
+\FILE=POLR4.82P
+:A:prgmPOLAJOUT
+:4:prgmPOLFACT1
+:ClrHome
+:Disp "ROOT(S) OF Q(X)
+:prgmPOLR
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR5
+\FILE=POLR5.82P
+:ClrHome
+:Disp "PERFECT SQUARE"
+:[A](4,1)\->\C
+:[A](4,3)\->\B
+:[A](4,5)\->\A
+:(B\^2\-4AC)\->\D
+:Disp "DISCR="
+:Disp D\>Frac\
+:If D<0
+:Then
+:Disp "NO SOLUTION
+:4:prgmPOLMF1
+:prgmSP1
+:Return
+:End
+:
+:If D=0
+:Then
+:Disp "X\^2\=-B/2A"
+:\(-)\B/(2A)\->\Z
+:Disp Z
+:2\->\E
+:prgmPOLR5SP
+:A:prgmPOLMF4
+:Return
+:End
+:
+:Disp "DISCR>0
+:prgmSP1
+:Disp "1/ X\^2\=(-B-\sqrt\D)/2A
+:(\(-)\B-\sqrt\D)/(2A)\->\Z
+:Disp Z
+:1\->\E
+:prgmPOLR5SP
+:Disp "2/ X\^2\=(-B+\sqrt\D)/2A
+:(\(-)\B+\sqrt\D)/(2A)\->\Z
+:Disp Z
+:1\->\E
+:prgmPOLR5SP
+:A:prgmPOLMF4
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLR5SP
+\FILE=POLR5SP.82P
+:If Z<0
+:Then
+:Disp "IMPOSSIBLE
+:Z:prgmPOLMF5
+:E\->\[B](J,2)
+:prgmSP1
+:Else
+:
+:\(-)\\sqrt\Z:prgmPOLMF2
+:If E=2
+:Then
+:\(-)\\sqrt\Z:prgmPOLMF2
+:End
+:\(-)\\sqrt\Z:prgmPOLAJOUT
+:
+:\sqrt\Z:prgmPOLMF2
+:If E=2
+:Then
+:\sqrt\Z:prgmPOLMF2
+:End
+:\sqrt\Z:prgmPOLAJOUT
+:End
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTABS
+\FILE=PTABS.82P
+:\(-)\1\->\I
+:prgmPTTV
+:prgmPTTH
+:12\->\I:prgmPTTV
+:For(K,2,J)
+:12+(K-1)E\->\I
+:[C](A,K)\->\X
+:If X=0
+:Then
+:Text(B,I,"0")
+:Pt-On(I+1,24-B)
+:Pt-On(I+1,30-B)
+:End
+:If X=1
+:Text(B,I,"+")
+:If X=\(-)\1
+:Text(B,I,"-")
+:If X=3
+:prgmPTDB
+:If X=2 or X=4
+:prgmPTTV
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTABV
+\FILE=PTABV.82P
+:\(-)\1\->\I
+:prgmPTTV
+:prgmPTTH
+:12\->\I:prgmPTTV
+:For(K,2,J)
+:12+E(K-1)\->\I
+:[C](1,K)\->\W
+:If W=1
+:prgmPTFH
+:If W=\(-)\1
+:prgmPTFB
+:If W=3
+:prgmPTDB
+:If W=2 or W=0
+:prgmPTV
+:If W=4
+:prgmPTTV
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTV
+\FILE=PTV.82P
+:If dim \L1\\<=\5
+:Then
+:\L1\((K+1)/2)\->\X
+:\Y0\(X)\->\Z
+:round(Z,6-dim \L1\)\->\Z
+:0\->\Y
+:If Z<0
+:Y+4\->\Y
+:If fPart (Z)\<>\0
+:Y+10\->\Y
+:If iPart (abs Z)=0
+:Then
+:4+Y\->\Y
+:Else
+:Y+4iPart log abs Z+4\->\Y
+:End
+:Text(B,I+2-iPart (Y/2),Z)
+:Else
+:prgmPTTV
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLRAC
+\FILE=POLRAC.82P
+:{Ans,4}
+:prgmPOLCOP
+:{\(-)\1\E\12,1\E\12}\->\\L1\
+:prgmPOLINILF
+:ClrHome
+:Disp "SOLVING"
+:prgmPOLR
+:ClrHome
+:Disp "SOLUTION(S)
+:If dim \L1\=2
+:Then
+:Disp "NO SOLUTION"
+:Else
+:For(I,1,dim \L1\-2)
+:Disp \L1\(I+1)\>Frac\
+:Output(I+1,1,"X")
+:Output(I+1,2,I)
+:End
+:End
+:prgmSP1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLSAI
+\FILE=POLSAI.82P
+:Ans\->\P
+:P:prgmPOLCLR
+:FnOff :ClrDraw:AxesOff:Split
+:Text(4,32,"n")
+:Text(4,60,"2")
+:Text(10,0,"P(X)= An X +...+A2 X +A1 X+A0")
+:Input "n=",D
+:D\->\[B](P,1)
+:For(I,D,0,\(-)\1)
+:ClrHome
+:Disp "VALUE OF A"
+:Output(1,11,I)
+:Input "",C
+:C\->\[A](P,I+1)
+:End
+:FullScreen
+:ClrHome
+:P:prgmPOLAFF
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLSGN
+\FILE=POLSGN.82P
+:prgmPOLCHX
+:ClrHome
+:P:prgmPOLSGNSP
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLSGNSP
+\FILE=POLSGNSP.82P
+:Ans\->\\L2\(1)
+:\L2\(1):prgmPOLRAC
+:prgmPOLFACTO
+:prgmPOLT1
+:ClrHome
+:Disp "SIGN ...
+:If [B](14,1)=0 and [B](13,1)\<>\0
+:Then
+:Disp "FACTOR 1
+:12:prgmPOLT2
+:Disp "FACTOR 2
+:13:prgmPOLT2
+:Disp "PRODUCT
+:End
+:\L2\(1):prgmPOLT2
+:prgmPOLTABS
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLT1
+\FILE=POLT1.82P
+:1\->\L
+:{4,2dim \L1\-1}\->\dim [C]
+:For(I,1,4)
+:0\->\[C](I,1)
+:End
+:SortA(\L1\)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLT2
+\FILE=POLT2.82P
+:Ans\->\I
+:dim [C]
+:{L,Ans(2)}\->\dim [C]
+:If [B](I,1)\>=\1
+:Then
+:"sum seq([A](I,J)X^(J-1),J,2,[B](I,1)+1,1)+[A](I,1)"\->\\Y6\
+:Else
+:"[A](I,1)"\->\\Y6\
+:End
+:For(K,2,dim \L1\)
+:\L1\(K)\->\A
+:\L1\(K-1)\->\B
+:(A+B)/2\->\C
+:If abs \Y6\(A)<1\E\\(-)\10
+:Then
+:0\->\[C](L,2K-1)
+:Else
+:2\->\[C](L,2K-1)
+:End
+:If \Y6\(C)>0 or fPart ([B](I,2)/2)=0
+:Then
+:1\->\[C](L,2K-2)
+:Else
+:\(-)\1\->\[C](L,2K-2)
+:End
+:End
+:I\->\[C](L,1)
+:4\->\[C](L,2dim \L1\-1)
+:""\->\\Y6\
+:L+1\->\L
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLTABS
+\FILE=POLTABS.82P
+:prgmPTINI
+:0\->\A
+:dim [C]\->\\L2\
+:Repeat A=\L2\(1)
+:A+1\->\A
+:8*A\->\B
+:prgmPTABS
+:End
+:
+:{0,0,A,dim \L1\}\->\\L2\
+:prgmPTCOMS
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLTABV
+\FILE=POLTABV.82P
+:dim [C]\->\\L2\
+:\L2\(1)\->\A
+:\L2\(2)\->\B
+:If A>1
+:rowSwap([C],A,1)\->\[C]
+:{1,B}\->\dim [C]
+:0\->\[C](1,1)
+:prgmPTINI
+:1\->\A
+:8\->\B
+:prgmPTABS
+:16\->\B
+:prgmPTABV
+:{0,0,2,dim \L1\}\->\\L2\
+:prgmPTCOMV
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=POLVAL
+\FILE=POLVAL.82P
+:ClrHome
+:Disp "VALUE OF P"
+:Output(1,11,P)
+:Prompt X
+:
+:If P=1
+:Disp \Y1\\>Frac\
+:If P=2
+:Disp \Y2\\>Frac\
+:If P=3
+:Disp \Y3\\>Frac\
+:prgmSP1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTAFF
+\FILE=PTAFF.82P
+:\L2\(1)\->\X
+:If X=0
+:Then
+:Disp "X"
+:Return
+:End
+:If [C](X,1)=100
+:Then
+:Disp "QUOTIENT"
+:Return
+:End
+:[B]([C](X,1),2)\->\W
+:If W>1
+:Then
+:Output(1,1,"(")
+:\(-)\15\->\C
+:[C](X,1):prgmSPAFP0
+:Output(\Y7\,\Y8\,")^")
+:C+2\->\C
+:Output(\Y7\,\Y8\,W)
+:Return
+:End
+:\(-)\16\->\C
+:[C](X,1):prgmSPAFP0
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTC
+\FILE=PTC.82P
+:8\L2\(1)+3\->\X
+:max(13+2E(\L2\(2)-1),6)\->\Y
+:
+:For(A,max(2,X-2),X+2)
+:Pxl-Change(A,Y)
+:End
+:For(A,Y-2,min(Y+2,Xmax))
+:Pxl-Change(X,A)
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTCOMS
+\FILE=PTCOMS.82P
+:1\->\\L2\(2)
+:0\->\Z:getKey
+:Lbl 1
+:ClrHome
+:Output(2,1,"USE CURSOR KEYS FOR VALUES, THEN
+:Output(4,1,"ENTER TO GO ON
+:
+:If \L2\(2)=0 and \L2\(1)>0
+:prgmPTAFF
+:
+:If \L2\(1)=0 and \L2\(2)>0
+:prgmPTVALX
+:
+:prgmPTC
+:0\->\Z:0\->\T:1\->\U
+:Repeat Z>0
+:getKey\->\Z
+:1+T\->\T
+:If fPart (T/5)=0
+:Then
+:Pxl-Change(X,Y)
+:\(-)\U\->\U
+:End
+:End
+:If U=\(-)\1
+:Pxl-Change(X,Y)
+:prgmPTC
+:
+:If Z=105
+:Return
+:If Z=24 and \L2\(2)>0
+:\L2\(2)-1\->\\L2\(2)
+:If Z=25 and \L2\(1)>0
+:\L2\(1)-1\->\\L2\(1)
+:If Z=26 and \L2\(2)<\L2\(4)
+:\L2\(2)+1\->\\L2\(2)
+:If Z=34 and \L2\(1)<\L2\(3)
+:\L2\(1)+1\->\\L2\(1)
+:
+:Goto 1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTCOMV
+\FILE=PTCOMV.82P
+:2\->\\L2\(1)
+:1\->\\L2\(2)
+:Text(8,4,"F'")
+:Text(16,4,"F")
+:
+:0\->\Z:getKey
+:Lbl 1
+:ClrHome
+:
+:prgmPTVALXY
+:
+:prgmPTC
+:0\->\Z:0\->\T:1\->\U
+:Repeat Z=105 or Z=24 or Z=26
+:getKey\->\Z
+:1+T\->\T
+:If fPart (T/5)=0
+:Then
+:Pxl-Change(X,Y)
+:\(-)\U\->\U
+:End
+:End
+:If U=\(-)\1
+:Pxl-Change(X,Y)
+:prgmPTC
+:
+:If Z=105
+:Return
+:
+:If Z=24 and \L2\(2)>1
+:\L2\(2)-1\->\\L2\(2)
+:
+:If Z=26 and \L2\(2)<\L2\(4)
+:\L2\(2)+1\->\\L2\(2)
+:
+:Goto 1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTDB
+\FILE=PTDB.82P
+:Line(I+2,24-B,I+2,30-B)
+:Line(I,24-B,I,30-B)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTFB
+\FILE=PTFB.82P
+:Line(I-1,29-B,I+3,25-B)
+:Pt-On(I+3,26-B)
+:Pt-On(I+3,27-B)
+:Pt-On(I+1,25-B)
+:Pt-On(I+2,25-B)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTFH
+\FILE=PTFH.82P
+:Line(I-1,25-B,I+3,29-B)
+:Pt-On(I+2,29-B)
+:Pt-On(I+3,28-B)
+:Pt-On(I+1,29-B)
+:Pt-On(I+3,27-B)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTINI
+\FILE=PTINI.82P
+:FnOff 
+:AxesOff
+:PlotsOff 
+:ClrDraw
+:Split
+:0\->\Xmin
+:0\->\Ymin
+:94\->\Xmax
+:30\->\Ymax
+:
+:Text(1,5,"X")
+:1\->\A
+:dim [C]
+:Ans(2)\->\J
+:int (81/(J-1))\->\E
+:\(-)\7\->\B
+:prgmPTTH
+:0\->\B
+:\(-)\1\->\I
+:prgmPTTV
+:12\->\I
+:prgmPTTV
+:12+E(J-1)\->\I
+:prgmPTTV
+:prgmPTTH
+:If dim \L1\\<=\5
+:Then
+:For(K,3,J-2,2)
+:12+E(K-1)\->\I
+:6-dim \L1\\->\Y
+:round(\L1\((K+1)/2),Y)\->\X
+:0\->\Y
+:If X<0
+:Y+4\->\Y
+:If fPart (X)\<>\0
+:Y+10\->\Y
+:If iPart (abs X)=0
+:Then
+:4+Y\->\Y
+:Else
+:Y+4iPart log abs X+4\->\Y
+:End
+:Text(1,2+I-iPart (Y/2),X)
+:End
+:Else
+:For(K,3,J-2,2)
+:12+E(K-1)\->\I
+:Text(1,I-2,"X")
+:Text(1,I+2,(K-1)/2)
+:End
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTTH
+\FILE=PTTH.82P
+:Line(0,23-B,13+(J-1)*E,23-B)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTTV
+\FILE=PTTV.82P
+:Line(I+1,24-B,I+1,30-B)
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTVAL1
+\FILE=PTVAL1.82P
+:If abs X<1\E\10
+:Then
+:Disp X\>Frac\
+:Else
+:Disp "
+:If X<0
+:Output(1,13,"-INF
+:If X>0
+:Output(1,13,"+INF
+:End
+:Output(1,1,"X")
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTVAL2
+\FILE=PTVAL2.82P
+:If abs Y<1\E\10
+:Then
+:Disp Y\>Frac\
+:Else
+:Disp "
+:If Y<0
+:Output(2,13,"-INF
+:If Y>0
+:Output(2,13,"+INF
+:End
+:Output(2,1,"Y")
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTVALX
+\FILE=PTVALX.82P
+:\L1\(\L2\(2))\->\X
+:prgmPTVAL1
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=PTVALXY
+\FILE=PTVALXY.82P
+:\L1\(\L2\(2))\->\X
+:prgmPTVAL1
+:dim [C]
+:If [C](Ans(1),2\L2\(2)-1)\<>\3
+:Then
+:\Y0\\->\Y
+:prgmPTVAL2
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SP1
+\FILE=SP1.82P
+:Output(8,14,">>>")
+:Pause 
+:ClrHome
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SP1S
+\FILE=SP1S.82P
+:Output(4,14,">>>")
+:Pause 
+:ClrHome
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SP2
+\FILE=SP2.82P
+:For(X,1,300)
+:End
+:ClrHome
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPAFC
+\FILE=SPAFC.82P
+:Ans\->\X
+:
+:If X<0
+:Then
+:Output(\Y7\,\Y8\,"-")
+:C+1\->\C
+:End
+:
+:If X>0 and F=0
+:Then
+:Output(\Y7\,\Y8\,"+")
+:C+1\->\C
+:End
+:
+:abs X\->\X
+:
+:If round(X,7)=1 and J\>=\1
+:Return
+:
+:If fPart round(X,7)=0 and X<1\E\9
+:Then
+:round(X,0)\->\X
+:prgmSPAFINT
+:Return
+:End
+:
+:If fPart round(X\^2\,7)=0 and X<10
+:Then
+:prgmSPAFRAC
+:Return
+:End
+:
+:X:prgmSPCVFRAC
+:Ans\->\X
+:If dim \L6\=2
+:Then
+:prgmSPAFPQ
+:Else
+:prgmSPAFDEC
+:End
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPAFDEC
+\FILE=SPAFDEC.82P
+:
+:
+:If X\>=\0.01 and X<100
+:Then
+:Normal
+:Fix 4
+:Output(\Y7\,\Y8\,X)
+:C+5\->\C
+:If X\>=\1
+:C+1\->\C
+:If X\>=\10
+:C+1\->\C
+:Else
+:Sci
+:Fix 5
+:Output(\Y7\,\Y8\,X)
+:C+10\->\C
+:End
+:Normal
+:Float
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPAFINT
+\FILE=SPAFINT.82P
+:Output(\Y7\,\Y8\,X)
+:If X=0
+:Then
+:C+2\->\C
+:Else
+:C+int (log X)+1\->\C
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPAFP0
+\FILE=SPAFP0.82P
+:Ans\->\I
+:1\->\F
+:[B](I,1)\->\D
+:If D=\(-)\1
+:Then
+:Output(\Y7\,\Y8\,0)
+:Return
+:End
+:
+:For(J,D,0,\(-)\1)
+:[A](I,J+1)\->\X
+:If abs X\>=\10*\@\
+:Then
+:X:prgmSPAFC
+:0\->\F
+:If J>0
+:Then
+:C+1\->\C
+:If J=1
+:Then
+:Output(\Y7\,\Y8\,"X")
+:C+1\->\C
+:Else
+:Output(\Y7\,\Y8\,"X^")
+:C+2\->\C
+:Output(\Y7\,\Y8\,J)
+:C+1\->\C
+:End
+:
+:If \Y7\=8
+:Then
+:0\->\C
+:Output(8,14,"...")
+:Pause 
+:End
+:End
+:End
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPAFPQ
+\FILE=SPAFPQ.82P
+:\L6\(1)\->\X
+:Output(\Y7\,\Y8\,X)
+:If X=0
+:Then
+:C+2\->\C
+:Return
+:End
+:C+int (log X)+1\->\C
+:\L6\(2)\->\X
+:If X=1
+:Return
+:Output(\Y7\,\Y8\,"/")
+:1+C\->\C
+:Output(\Y7\,\Y8\,X)
+:C+int (log X)+1\->\C
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPAFRAC
+\FILE=SPAFRAC.82P
+:Output(\Y7\,\Y8\,"\sqrt\"
+:C+1\->\C
+:round(X^2,0)\->\X
+:prgmSPAFINT
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPCVFRAC
+\FILE=SPCVFRAC.82P
+:{0,1,1,int abs Ans,int abs Ans,1,abs Ans,Ans,int abs Ans}\->\\L6\
+:If abs (\L6\(7)-\L6\(9))\<=\\@\
+:Goto 1
+:If abs (\L6\(7)-\L6\(9)\<=\\@\\L6\(8)
+:Goto 1
+:Repeat abs (abs \L6\(8)-\L6\(5)/\L6\(6))\<=\\@\ or \L6\(6)>500
+:1/(\L6\(7)-\L6\(9))\->\\L6\(7)
+:int Ans\->\\L6\(9)
+:\L6\(4)Ans+\L6\(3)\->\\L6\(5)
+:\L6\(4)\->\\L6\(3)
+:\L6\(5)\->\\L6\(4)
+:\L6\(2)\L6\(9)+\L6\(1)\->\\L6\(6)
+:\L6\(2)\->\\L6\(1)
+:\L6\(6)\->\\L6\(2)
+:End
+:Lbl 1
+:If \L6\(8)<0
+:\(-)\\L6\(5)\->\\L6\(5)
+:If \L6\(6)\<=\500
+:Then
+:{\L6\(5),\L6\(6)}\->\\L6\
+:\L6\(1)/\L6\(2)
+:Else
+:{\L6\(8)}\->\\L6\
+:\L6\(1)
+:End
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 17:18
+\NAME=SPGRADU
+\FILE=SPGRADU.82P
+:1\->\Xscl
+:1\->\Yscl
+:If Xmax-Xmin>15
+:5\->\Xscl
+:If Ymax-Ymin>15
+:5\->\Yscl
+:If Xmax-Xmin>50
+:10\->\Xscl
+:If Ymax-Ymin>50
+:10\->\Yscl
+\STOP82\
+----begin uue----
+begin 644 POLFRAC.82G
+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
+`
+end
+----end uue----

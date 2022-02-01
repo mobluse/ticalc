@@ -1,0 +1,166 @@
+This is a Fast Fourier Transform program.
+----begin documentation----
+This 82u-file was prepared by Mikael Bonnier, http://www.df.lth.se.orbin.se/~mikaelb/.
+
+			   *************************
+			   * FFT.82G for the TI-82 *
+			   *************************
+
+ACKNOWLEDGMENT
+
+FFT.82G is a group file containing the programs FFT.82P and XX.82P.  These
+programs were written by Ralph Payne of the TI Graphics Team and are released
+to the public domain.  You may copy and change these programs.
+
+INTRODUCTION
+
+This pair of "82" programs illustrate the use of the Fast Fourier Transform.
+The Fast Fourier Transform (FFT) is a clever implementation of the Discrete
+Fourier Transform and is well described in numerous publications. This
+particular code implements a simple radix two algorithm with coefficient
+recursion. It assumes that the real part of the time series is in L1 and
+that the imaginary part is in L2. The process is done in place and
+the positive frequencies are in the lower half of L1 and L2 and the negative
+frequencies are in the upper half. The maximum length is 64.
+
+HOW TO USE FFT
+
+A driver program, FFTDEMO, prompts for the length (N), two frequencies, and a
+noise amplitude. The program assumes that the transform length is one second,
+so if the frequency is greater than one half the length aliasing will occur.
+If the frequency is not an integer then scallop loss will occur, but may
+not be obvious because the display is automatically scaled. The frequency
+is of unit amplitude so the noise that is added is a multiple of one. This
+value can be varied to see how the FFT can "pull" a signal out of the noise
+The driver program sets the parametric mode and changes the window settings.
+It also stores new equations to the first two parametric equation pairs.
+Since the FFT expects input in L1 and L2 and operates in place, XX puts a
+time series in L1 and 0's in L2 and copies L1 to L5. Since the imaginary
+vector is 0, the transform will be symmetric. (If the input data is complex
+the transform will not, in general, be symmetric.)  The magnitudes are stored
+in L4. L4 and L5 are then scaled to fit on the Display. The upper half of the
+display is the time series and the lower half is the frequency domain.
+Program FFTDEMO, which calls FFT, takes about 25 seconds to execute a 32 
+length transform and about 50 seconds to execute a 64 length transform.
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 08/13/96, 16:52
+\NAME=FFT
+\FILE=FFT.82P
+:int (ln N/ln 2+.5)\->\M
+:1\->\J
+:For(I,1,N-1)
+:If I>J
+:Then
+:\L1\(J)\->\T
+:\L1\(I)\->\\L1\(J)
+:T\->\\L1\(I)
+:\L2\(J)\->\T
+:\L2\(I)\->\\L2\(J)
+:T\->\\L2\(I)
+:End
+:N/2\->\K
+:While K<J
+:J-K\->\J
+:K/2\->\K
+:End
+:J+K\->\J
+:End
+:For(I,1,N,2)
+:I+1\->\P
+:\L1\(P)\->\U
+:\L2\(P)\->\V
+:\L1\(I)-U\->\\L1\(P)
+:\L2\(I)-V\->\\L2\(P)
+:\L1\(I)+U\->\\L1\(I)
+:\L2\(I)+V\->\\L2\(I)
+:End
+:2\->\E
+:For(L,2,M)
+:E\->\S:2E\->\E
+:1\->\U:0\->\V
+:2*\pi\/E\->\A
+:cos A\->\W
+:sin A\->\X
+:For(J,1,S)
+:For(I,J,N,E)
+:I+S\->\P
+:U*\L1\(P)-V*\L2\(P)\->\B
+:U*\L2\(P)+V*\L1\(P)\->\C
+:\L1\(I)-B\->\\L1\(P)
+:\L2\(I)-C\->\\L2\(P)
+:\L1\(I)+B\->\\L1\(I)
+:\L2\(I)+C\->\\L2\(I)
+:End
+:W*U-X*V\->\T
+:W*V+X*U\->\V:T\->\U
+:End
+:End
+:Return
+\STOP82\
+\START82\
+\COMMENT=Program file dated 08/13/96, 16:52
+\NAME=FFTDEMO
+\FILE=FFTDEMO.82P
+:Input "ENTER N ",N
+:Input "ENTER FREQ1 ",F
+:Input "ENTER FREQ2 ",G
+:Input "ENTER NOISE ",D
+:2\pi\/N\->\R
+:seq(I*R,I,1,N,1)\->\\L3\
+:sin (F*\L3\)+sin (G*\L3\)\->\\L2\
+:cos (F*\L3\)+cos (G*\L3\)\->\\L1\
+:seq(D*rand-D/2,I,1,N,1)\->\\L3\
+:\L1\+\L3\\->\\L1\
+:\L2\+\L3\\->\\L2\
+:0*\L1\\->\\L2\
+:\L1\\->\\L5\
+:prgmFFT
+:\sqrt\(\L1\\^2\+\L2\\^2\)\->\\L4\
+:max(\L5\)\->\H
+:min(\L5\)\->\G
+:3/(H-G)*\L5\+((.5*H-3.5*G)/(H-G))\->\\L5\
+:max(\L4\)\->\H
+:min(\L4\)\->\G
+:3.5/(H-G)*\L4\+((.5*G-4*H)/(H-G))\->\\L4\
+:Param
+:1\->\Tmin
+:N\->\Tmax
+:1\->\Tstep
+:0\->\Xmin
+:N-1\->\Xmax
+:4\->\Xscl
+:\(-)\4\->\Ymin
+:4\->\Ymax
+:1\->\Yscl
+:"T-1\->\\X1t\
+:"\L5\(T)\->\\Y1t\
+:"T-1\->\\X2t\
+:"\L4\(T)\->\\Y2t\
+:DispGraph
+\STOP82\
+----begin uue----
+begin 644 FFT.82G
+M*BI423@R*BH:"@!'<F]U<&5D(&9I;&4@9&%T960@,#8O,#DO.3,L(#$P.C`X
+M``#.0`86571``PL`G`$%1D94``````"<`9H!L1"^3H.^,G`Z-1$$33\Q!$H_
+MTTDK,2M.<3$1/\Y);$H_SS]=`!!*$014/UT`$$D1!%T`$$H1/U0$70`021$_
+M70$02A$$5#]=`1!)$01=`1!*$3]4!%T!$$D1/]0_3H,R!$L_T4MK2C]*<4L$
+M2C]+@S($2S_4/TIP2P1*/]0_TTDK,2M.*S(1/TEP,010/UT`$%`1!%4_70$0
+M4!$$5C]=`!!)$7%5!%T`$%`1/UT!$$D1<58$70$04!$_70`021%P501=`!!)
+M$3]=`1!)$7!6!%T!$$D1/]0_,@1%/]-,*S(K31$_1013/C)%!$4_,015/C`$
+M5C\R@JR#101!/\1!!%<_PD$$6#_32BLQ*U,1/]-)*THK3BM%$3])<%,$4#]5
+M@ET`$%`1<5:"70$04!$$0C]5@ET!$%`1<%:"70`04!$$0S]=`!!)$7%"!%T`
+M$%`1/UT!$$D1<4,$70$04!$_70`021%P0@1=`!!)$3]=`1!)$7!#!%T!$$D1
+M/]0_5X)5<5B"5@14/U>"5G!8@E4$5CY4!%4_U#_4/]4+`(8!!49&5$1%34\`
+MA@&$`=PJ14Y415(I3BDJ*TX_W"I%3E1%4BE&4D51,2DJ*T8_W"I%3E1%4BE&
+M4D51,BDJ*T<_W"I%3E1%4BE.3TE312DJ*T0_,JR#3@12/R-)@E(K22LQ*TXK
+M,1$$70(_PA!&@ET"$7#"$$>"70(1!%T!/\001H)=`A%PQ!!'@ET"$01=`#\C
+M1(*K<42#,BM)*S$K3BLQ$01=`C]=`'!=`@1=`#]=`7!=`@1=`3\P@ET`!%T!
+M/UT`!%T$/U]&1E0_O!!=``UP70$-$01=`S\97001!$@_&ET$$01'/S.#$$AQ
+M1Q&"701P$!`Z-8)(<3,Z-8)'$8,02'%'$1$$700_&5T#$01(/QI=`Q$$1S\S
+M.C6#$$AQ1Q&"70-P$!`Z-8)'<32"2!&#$$AQ1Q$1!%T#/W<_,01C#C].!&,/
+M/S$$8R(_,`1C"C].<3$$8PL_-`1C`C^P-`1C##\T!&,-/S$$8P,_*E1Q,01>
+B(#\J70005!$$7B$_*E1Q,01>(C\J70,05!$$7B,_WS]HQ@``
+`
+end
+----end uue----

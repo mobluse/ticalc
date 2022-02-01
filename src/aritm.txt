@@ -1,0 +1,673 @@
+Aritm trains you in simple mental calculation. This program teaches
+its users the addition, subtraction, multiplication, and division tables.
+----begin documentation----
+ 
+    Aritm for TI-8* v0.2 is FOSS (Free Open Source Software).
+    Copyright (C) 2010 by Mikael O. Bonnier, Lund, Sweden.
+    License GPLv3+, see http://www.gnu.org/licenses/gpl.html.
+ 
+ 
+1. System and Memory Requirements
+This program currently has two model versions: TI-82 and TI-83. The TI-82 STATS, 
+TI-83, TI-83 Plus, TI-84 Plus (including Silver Edition) runs the TI-83 model 
+version. A TI-89 model version is coming. Since TI-Nspire has TI-84 Plus emulation 
+it should be able to run the TI-83 model version.
+
+Aritm for TI-83 uses or alters these variables:
+Real: L (left), M (menu), U (upperLimit), N (numberOfProblems),
+I (first), J (last), K (index), T (temporary), C (character),
+A (answer), R (result).
+List: L\6\.
+Function: Y\9\.
+
+Aritm for TI-82 additionally uses:
+Matrix: [E] instead of L\6\.
+Function: \Y8\.
+Parametric: \Y6t\,\X6t\
+
+Aritm for TI-8* etc uses these labels: C (continue), S (start), U, K, W (win), 
+E (setup), H (help), A (about), Q (exit/quit).
+
+
+2. Installation
+Send the ARITM.83G group file to the calculator (or ARITM.82G if you have the old 
+TI-82) using a TI-Graph Link hardware and computer software. If you don't have a 
+link you can either ungroup a group file and view the resulting 83P/82P files in 
+the TI-Graph Link software or enter the appropriate ASCII listings below by 
+translating to calculator tokens as you type them in.
+
+ 
+3. User Instructions
+Start Aritm the way programs are normally started according to the manual, i.e.
+select it from the PRGM/EXEC menu and press ENTER.
+
+In Aritm select SETUP and GO. Type a digit and press ENTER to toggle the 
+corresponding exercises. You can choose several exercises. You can return to 
+the main menu by typing \pi\. When you want to start type 0 and press ENTER.
+The problems are generated and then shuffled. Answer the problems by typing
+the answer in numbers and press ENTER. You see the result and can press ENTER
+for next problem. If you type \pi\ instead of a number you will return to the
+main menu. There you can choose EXIT and when you run Aritm the next time you 
+can continue where you left off.
+
+
+4. Anecdotes 
+Aritm uses the Fisher–Yates shuffle, as implemented by Durstenfeld 
+<http://en.wikipedia.org/wiki/Fisher%E2%80%93Yates_shuffle>. Originally I
+had a different, probably biased algorithm:
+For(I,1,U)
+randInt(1,U)->J
+L(I)->T
+L(J)->L(I)
+T->L(J)
+End
+
+The TI-82 version generates problems and shuffles much slower than the 
+TI-83 version. This is beacause a matrix must be used since indices can
+be maximum 99 on TI-82. However, the interaction is equally fast.
+
+
+5. Availability
+Aritm is also available for mobile/cell phones w/ Java ME and for web 
+browsers w/ Java SE, see http://aritm.orbin.se/ or search http://GetJar.com 
+or http://Phoload.com. Since it is FOSS it's OK to port it to other systems
+according to GPLv3+, but please test the problem generation carefully before 
+you release it. I have more TI-8* programs at:
+http://www.df.lth.se.orbin.se/~mikaelb/ticalc.html.
+
+
+Suggestions, improvements, bug, and bad-English-in-doc reports
+are always welcome to:
+                 Mikael O. Bonnier
+                 Osten Undens gata 88
+                 SE-227 62  LUND
+                 SWEDEN
+                             
+Or use my internet addresses:
+                 mikael.bonnier@gmail.com
+                 http://www.df.lth.se.orbin.se/~mikaelb/
+ 
+// Mikael O. Bonnier
+/////////////////////////////////////////////////////////////////////
+----end documentation----
+----begin ASCII----
+\start83\
+\comment=Program file dated 11/02/10, 17:20
+\name=ARITM
+\file=C:\USERS\MIKAEL\DOCUME~1\TI-82\ARITM.TXT
+Float
+Lbl C
+If L>0 and M
+Menu("ARITM","CONTINUE",K,"SETUP and GO",E,"HELP",H,"ABOUT",A,"EXIT",Q
+If not(M:10\->\M
+Menu("ARITM","SETUP and GO",E,"HELP",H,"ABOUT",A,"EXIT",Q
+Lbl S
+ClrHome
+Disp "ARITM","GENERATING","PROBLEMS...
+1\->\U
+N\->\dim(L\6\
+"iPart(log(X+(X<1"\->\Y\9\
+If .5\<=\fPart(M/\EE\1/2:Then
+For(I,0,9
+For(J,0,9
+\EE\9+I\EE\6+J\EE\4+1\->\L\6\(U
+U+1\->\U
+End
+End
+End
+If .5\<=\fPart(M/\EE\2/2:Then
+For(I,0,9
+For(J,0,9
+10randInt(1,8\->\T
+2\EE\9+(T+I)\EE\6+J\EE\4+1\->\L\6\(U
+U+1\->\U
+End
+End
+End
+If .5\<=\fPart(M/\EE\3/2:Then
+For(I,0,9
+For(J,I,9+I
+3\EE\9+J\EE\6+I\EE\4+1\->\L\6\(U
+U+1\->\U
+End
+End
+End
+If .5\<=\fPart(M/\EE\4/2:Then
+For(I,0,9
+For(J,I,9+I
+10randInt(1,9\->\T
+4\EE\9+(T+J)\EE\6+I\EE\4+1\->\L\6\(U
+U+1\->\U
+End
+End
+End
+If .5\<=\fPart(M/\EE\5/2:Then
+For(I,0,9
+For(J,0,9
+5\EE\9+I\EE\6+J\EE\4+1\->\L\6\(U
+U+1\->\U
+End
+End
+End
+If .5\<=\fPart(M/\EE\6/2:Then
+For(I,0,9
+For(J,1,9
+IJ+randInt(0,J-1\->\T
+6\EE\9+T\EE\6+J\EE\4+1\->\L\6\(U
+U+1\->\U
+End
+End
+End
+U-1\->\U
+U\->\L
+Lbl U
+Disp "SHUFFLING...
+For(I,U,2,\(-)\1
+randInt(1,I\->\J
+L\6\(I\->\T
+L\6\(J\->\L\6\(I
+T\->\L\6\(J
+End
+1\->\K
+Lbl K
+ClrHome
+Disp "ARITM","
+L\6\(K)\->\T
+\EE\3fPart(iPart(T/\EE\6)/\EE\3\->\I
+Output(2,1,I
+iPart(T/\EE\9\->\C
+If C=1 or C=2
+Output(2,2+Y\9\(I),"+
+If C=3 or C=4
+Output(2,2+Y\9\(I),"-
+If C=5
+Output(2,2+Y\9\(I),"*
+If C=6:Then
+Output(2,2+Y\9\(I),"/
+Output(1,10,"iPart()
+End
+\EE\2fPart(iPart(T/\EE\4)/\EE\2\->\J
+Output(2,3+Y\9\(I),J
+Output(2,4+Y\9\(I)+Y\9\(J),"=
+Output(8,12,"\pi\ ESC
+Input "",A
+If A=\pi\
+Goto C
+If C=1 or C=2
+I+J\->\R
+If C=3 or C=4
+I-J\->\R
+If C=5
+IJ\->\R
+If C=6
+iPart(I/J\->\R
+If R=iPart(A
+Then
+Disp "RIGHT!
+If 0<fPart(T/\EE\2
+Then
+L-1\->\L
+T-1\->\L\6\(K
+End
+K+1\->\K
+Output(4,8,L
+Disp "PROBLEMS LEFT.
+prgmZABANNER
+If L>0
+Pause 
+Else
+Disp "WRONG.
+Output(5,1,I
+If C=1 or C=2
+Output(5,2+Y\9\(I),"+
+If C=3 or C=4
+Output(5,2+Y\9\(I),"-
+If C=5
+Output(5,2+Y\9\(I),"*
+If C=6
+Output(5,2+Y\9\(I),"/
+Output(5,3+Y\9\(I),J
+Output(5,4+Y\9\(I)+Y\9\(J)," IS
+Output(5,8+Y\9\(I)+Y\9\(J),R
+If 99>\EE\2fPart(T/\EE\2
+Then
+L+1\->\L
+T+1\->\L\6\(K
+End
+K+1\->\K
+Pause 
+End
+If K\<=\U
+Goto K
+If L\<=\0
+Goto W
+ClrHome
+Disp "CHECKING...
+1\->\N
+For(K,1,U
+L\6\(K\->\T
+If 0<fPart(T/\EE\2
+Then
+T\->\L\6\(N
+N+1\->\N
+End
+End
+N-1\->\U
+Goto U
+Lbl W
+DelVar Y\9\
+DelVar L\6\
+DelVar L
+Disp "GOOD!!!","  WeLL DOne!"
+Pause 
+Goto C
+Lbl E
+ClrHome
+Disp "1 ADDITION 1
+Disp "2 ADDITION 2
+Disp "3 SUBTRACTION 1
+Disp "4 SUBTRACTION 2
+Disp "5 MULTIPLICATION
+Disp "6 DIVISION\dot\\pi\ ESC
+Disp "0 OK and GO
+0\->\N
+For(A,1,6
+If .5\<=\fPart(M/\10\^(A)/2:Then
+Output(A,2,"\box\
+N+100-10(A=6\->\N
+End
+End
+Output(7,13,N
+Input "TOGGLE ITEM: ",A
+If A=0:Goto S
+If A=\pi\:Goto C
+If .5\<=\fPart(M/\10\^(A)/2:Then
+M-\10\^(A\->\M
+Else
+M+\10\^(A\->\M
+End
+Goto E
+Lbl H
+prgmZAHELP
+Goto C
+Lbl A
+prgmZAABOUT
+Goto C
+Lbl Q
+ClrHome
+\stop83\
+
+\start83\
+\comment=Program file dated 11/02/10, 17:20
+\name=ZABANNER
+\file=C:\USERS\MIKAEL\DOCUME~1\TI-82\ZABANNER.TXT
+If 0=fPart(L/10
+Output(8,2,"MATTECENTRUM.SE
+\stop83\
+
+\start83\
+\comment=Program file dated 11/02/10, 17:20
+\name=ZAHELP
+\file=C:\USERS\MIKAEL\DOCUME~1\TI-82\ZAHELP.TXT
+ClrHome
+Output(1,1," \box\ARITM/HELP\box\   YOU CAN MIX     PROBLEMS ANYWAY YOU LIKE. MORE  HELP ON  HTTP://ARITM.ORBIN.SE/
+prgmZABANNER
+Pause 
+\stop83\
+
+\start83\
+\comment=Program file dated 11/02/10, 17:20
+\name=ZAABOUT
+\file=C:\USERS\MIKAEL\DOCUME~1\TI-82\ZAABOUT.TXT
+ClrHome
+Output(1,1,"\box\ABOUT ARITM 0.2(C) 1992-2010 BYMIKAEL O BONNIERLUND, SWEDEN.   ABSOLUTELY NO   WARRANTY. FOSS, SEE LICENSE GPL V3+.
+Pause 
+\stop83\
+
+\START82\
+\COMMENT=Program file dated 11/02/10, 15:38
+\NAME=ARITM
+\FILE=C:\USERS\MIKAEL\DOCUME~1\TI-82\ARITM.82P
+:Float
+:Lbl C
+:If L>0 and M
+:Menu("ARITM","CONTINUE",K,"SETUP and GO",E,"HELP",H,"ABOUT",A,"EXIT",Q\#\
+:If not M:10\->\M
+:Menu("ARITM","SETUP and GO",E,"HELP",H,"ABOUT",A,"EXIT",Q
+:Lbl S
+:ClrHome
+:Disp "ARITM","GENERATING","PROBLEMS...
+:1\->\U
+:"1+iPart ((T-1)/99"\->\\Y6t\
+:"1+round(99fPart ((T-1)/99"\->\\X6t\
+:{\Y6t\(N),99\->\dim [E]
+:"[E](\Y6t\(X),\X6t\(X"\->\\Y8\
+:"iPart log (X+(X<1"\->\\Y9\
+:If .5\<=\fPart (M/\E\1/2:Then
+:For(I,0,9
+:For(J,0,9
+:\E\9+I\E\6+J\E\4+1\->\[E](\Y6t\(U),\X6t\(U
+:U+1\->\U
+:End
+:End
+:End
+:If .5\<=\fPart (M/\E\2/2:Then
+:For(I,0,9
+:For(J,0,9
+:10iPart (8rand+1\->\T
+:2\E\9+(T+I)\E\6+J\E\4+1\->\[E](\Y6t\(U),\X6t\(U
+:U+1\->\U
+:End
+:End
+:End
+:If .5\<=\fPart (M/\E\3/2:Then
+:For(I,0,9
+:For(J,I,9+I
+:3\E\9+J\E\6+I\E\4+1\->\[E](\Y6t\(U),\X6t\(U
+:U+1\->\U
+:End
+:End
+:End
+:If .5\<=\fPart (M/\E\4/2:Then
+:For(I,0,9
+:For(J,I,9+I
+:10iPart (9rand+1\->\T
+:4\E\9+(T+J)\E\6+I\E\4+1\->\[E](\Y6t\(U),\X6t\(U
+:U+1\->\U
+:End
+:End
+:End
+:If .5\<=\fPart (M/\E\5/2:Then
+:For(I,0,9
+:For(J,0,9
+:5\E\9+I\E\6+J\E\4+1\->\[E](\Y6t\(U),\X6t\(U
+:U+1\->\U
+:End
+:End
+:End
+:If .5\<=\fPart (M/\E\6/2:Then
+:For(I,0,9
+:For(J,1,9
+:IJ+iPart (Jrand\->\T
+:6\E\9+T\E\6+J\E\4+1\->\[E](\Y6t\(U),\X6t\(U
+:U+1\->\U
+:End
+:End
+:End
+:U-1\->\U
+:U\->\L
+:Lbl U
+:Disp "SHUFFLING...
+:For(I,U,2,\(-)\1
+:iPart (Irand+1\->\J
+:\Y8\(I\->\T
+:\Y8\(J\->\[E](\Y6t\(I),\X6t\(I))
+:T\->\[E](\Y6t\(J),\X6t\(J))
+:End
+:1\->\K
+:Lbl K
+:ClrHome
+:Disp "ARITM","
+:\Y8\(K)\->\T
+:\E\3fPart (iPart (T/\E\6)/\E\3\->\I
+:Output(2,1,I
+:iPart (T/\E\9\->\C
+:If C=1 or C=2
+:Output(2,2+\Y9\(I),"+
+:If C=3 or C=4
+:Output(2,2+\Y9\(I),"-
+:If C=5
+:Output(2,2+\Y9\(I),"*
+:If C=6:Then
+:Output(2,2+\Y9\(I),"/
+:Output(1,10,"iPart 
+:End
+:\E\2fPart (iPart (T/\E\4)/\E\2\->\J
+:Output(2,3+\Y9\(I),J
+:Output(2,4+\Y9\(I)+\Y9\(J),"=
+:Output(8,12,"\pi\ ESC
+:Input "",A
+:If A=\pi\
+:Goto C
+:If C=1 or C=2
+:I+J\->\R
+:If C=3 or C=4
+:I-J\->\R
+:If C=5
+:IJ\->\R
+:If C=6
+:iPart (I/J\->\R
+:If R=iPart A
+:Then
+:Disp "RIGHT!
+:If 0<fPart (T/\E\2
+:Then
+:L-1\->\L
+:T-1\->\[E](\Y6t\(K),\X6t\(K
+:End
+:K+1\->\K
+:Output(4,8,L
+:Disp "PROBLEMS LEFT.
+:prgmZABANNER
+:If L>0
+:Pause 
+:Else
+:Disp "WRONG.
+:Output(5,1,I
+:If C=1 or C=2
+:Output(5,2+\Y9\(I),"+
+:If C=3 or C=4
+:Output(5,2+\Y9\(I),"-
+:If C=5
+:Output(5,2+\Y9\(I),"*
+:If C=6
+:Output(5,2+\Y9\(I),"/
+:Output(5,3+\Y9\(I),J
+:Output(5,4+\Y9\(I)+\Y9\(J)," IS
+:Output(5,8+\Y9\(I)+\Y9\(J),R
+:If 99>\E\2fPart (T/\E\2
+:Then
+:L+1\->\L
+:T+1\->\[E](\Y6t\(K),\X6t\(K
+:End
+:K+1\->\K
+:Pause 
+:End
+:If K\<=\U
+:Goto K
+:If L\<=\0
+:Goto W
+:ClrHome
+:Disp "CHECKING...
+:1\->\N
+:For(K,1,U
+:\Y8\(K\->\T
+:If 0<fPart (T/\E\2
+:Then
+:T\->\[E](\Y6t\(N),\X6t\(N
+:N+1\->\N
+:End
+:End
+:N-1\->\U
+:Goto U
+:Lbl W
+:""\->\\Y6t\
+:""\->\\X6t\
+:""\->\\Y8\
+:""\->\\Y9\
+:{1,1}\->\dim [E]
+:0\->\L
+:Disp "GOOD!!!","  WeLL DOne!"
+:Pause 
+:Goto C
+:Lbl E
+:ClrHome
+:Disp "1 ADDITION 1
+:Disp "2 ADDITION 2
+:Disp "3 SUBTRACTION 1
+:Disp "4 SUBTRACTION 2
+:Disp "5 MULTIPLICATION
+:Disp "6 DIVISION\dot icon\\pi\ ESC
+:Disp "0 OK and GO
+:0\->\N
+:For(A,1,6
+:If .5\<=\fPart (M/\10^\A/2:Then
+:Output(A,2,"\box icon\
+:N+100-10(A=6\->\N
+:End
+:End
+:Output(7,13,N
+:Input "TOGGLE ITEM: ",A
+:If A=0:Goto S
+:If A=\pi\:Goto C
+:If .5\<=\fPart (M/\10^\A/2:Then
+:M-\10^\(A\->\M
+:Else
+:M+\10^\(A\->\M
+:End
+:Goto E
+:Lbl H
+:prgmZAHELP
+:Goto C
+:Lbl A
+:prgmZAABOUT
+:Goto C
+:Lbl Q
+:ClrHome
+\STOP82\
+
+\START82\
+\COMMENT=Program file dated 11/01/10, 09:41
+\NAME=ZABANNER
+\FILE=C:\USERS\MIKAEL\DOCUME~1\TI-82\ZABANNER.82P
+:If 0=fPart (L/10
+:Output(8,2,"MATTECENTRUM.SE
+\STOP82\
+
+\START82\
+\COMMENT=
+\NAME=ZAHELP
+\FILE=C:\USERS\MIKAEL\DOCUME~1\TI-82\ZAHELP.82P
+:ClrHome
+:Output(1,1," \box icon\ARITM/HELP\box icon\   YOU CAN MIX     PROBLEMS\#\
+ ANYWAY YOU LIKE. MORE  HELP ON  HTTP://ARITM.ORBIN.SE/
+:prgmZABANNER
+:Pause 
+\STOP82\
+
+\START82\
+\COMMENT=
+\NAME=ZAABOUT
+\FILE=C:\USERS\MIKAEL\DOCUME~1\TI-82\ZAABOUT.82P
+:ClrHome
+:Output(1,1,"\box icon\ABOUT ARITM 0.2(C) 1992-2010 BYMIKAEL O BONNIERL\#\
+UND, SWEDEN.   ABSOLUTELY NO   WARRANTY. FOSS, SEE LICENSE GPL V3+.
+:Pause 
+\STOP82\
+----end ASCII----
+----begin UUE----
+begin 664 aritm.83g
+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
+A4#Z#@T%2251-.D]20DE..E-%@S]?6D%"04Y.15(_V%%B
+ 
+end 
+
+begin 664 ARITM.82G
+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
+64D))3CI318,_7UI!0D%.3D52/]AQB@``
+ 
+end
+----end UUE----

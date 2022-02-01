@@ -1,0 +1,158 @@
+Computes the Greatest Common Divisor [or Highest Common Factor] of a
+LIST of integers. Also includes an LCM/LCD program. v1.0 for TI-82.
+----begin documentation----
+
+    GCDLCM v1.0 is Freeware
+    Commercial Distribution Restricted
+    Copyright (C) 1994 by Mikael Bonnier, Lund, Sweden.
+
+
+1. System and Memory Requirements
+This program is for the TI-82. It consists of two main programs,
+and one sub program that together uses 219 bytes. It requires
+additionally a minimum of 108 bytes, and a maximum of 973 bytes for
+data to run, depending on the number of numbers :-).
+
+GCDHCF and LCMLCD uses or alters these variables:
+Real:   J,K,L,M,N
+List:   L1
+
+
+2. Installation
+If you have TI-GRAPH LINK UUDecode this file, and send the resulting
+GCDLCM.82G program to the calculator. If you don't have a link you
+will have to enter the three ASCII82P listings below.
+
+
+3. User Instructions
+The program computes the Greatest Common Divisor (GCD) or the Highest 
+Common Factor (HCF) of some numbers. The GCD is defined as the 
+largest number which divides all the given numbers evenly (i.e. 
+with remainder zero). This is same as the HCF.
+
+GCDHCF handles lists as long as the TI-82 allows i.e. 99 elements.
+The elements must be integers greater than or equal to zero.
+The program uses the list stored in Ans.
+
+Example:
+{20,70,80}:prgmGCDHCF [ENTER]
+Ans=10
+
+Example:
+{294,210,126,462} [ENTER]
+prgmGCDHCF [ENTER]
+Ans=42
+Which can be tested by:
+{294,210,126,462}/42 [ENTER]
+Ans={7 5 3 11}
+
+A common manual algorithm is to divide all numbers with a small
+prime number, that divide all the numbers evenly. Write out the
+results and then 'Da Capo al Fine'. Then one multiplies together
+the divisors [factors] to get the GCD [HCF]. However this is not 
+the algorithm this program uses.
+
+LCMLCD has the same user interface as GCDHCF but computes the
+Least Common Multiple or the Least Common Denominator. The LCM is
+defined as least number that is a multiple of each number in the
+list. A multiple of a number is the product of that number and
+an integer. The LCD is same as the LCM.
+
+Example:
+{21,24,26,28}:prgmLCMLCD [ENTER]
+Ans=2184
+
+Warning:
+This program is not secure. You can enter erroneous indata 
+without the program complaining, and you may receive reasonable 
+but incorrect outdata. (This is famous SISO priniple, Shit In
+Shit Out.) But it is not difficult to add code to make it safe.
+
+
+4. Program Comments
+The program uses Euclid's GCD [HCF] algorithm. GCDHCF and LCMLCD
+uses the same subprogram: ZGCDHCF. 'MfPart (N/M)' computes the 
+remainder of N integer-divided by M. The 'round(' function prevents
+build-up of floating point errors.
+
+
+5. References      
+Check out any reasonable text on algebra or algorithms, e.g.:
+
+Thomas H. Cormen, Charles E. Leiserson, and Ronald L. Rivest.
+"Introduction to Algorithms".
+The MIT Press, Cambridge, Massachusetts, 1990.
+
+John Daintith and R. D. Nelson (Editors).
+"The Penguin Dictionary of Mathematics".
+Penguin Books Ltd, London, 1989.
+
+A. K. Dewdney.
+"The (New) Turing Omnibus".
+Computer Science Press and W. H. Freeman and Company, New York, 1993.
+
+
+Suggestions, improvements, bug, and bad-English-in-doc reports
+are always welcome to:
+                 Mikael Bonnier
+                 Osten Undens gata 88
+                 SE-227 62  LUND
+                 SWEDEN
+                             
+Or use my internet addresses:
+                 mikael.bonnier@gmail.com
+                 http://www.df.lth.se.orbin.se/~mikaelb/
+
+// Mikael Bonnier
+/////////////////////////////////////////////////////////////////////
+----begin ascii----
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=GCDHCF
+\FILE=GCDHCF.82P
+Ans\->\\L1\
+abs \L1\(1)\->\N
+For(J,2,dim \L1\)
+prgmZGCDHCF
+round(N,0)\->\N
+End
+N
+\STOP82\
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=LCMLCD
+\FILE=LCMLCD.82P
+Ans\->\\L1\
+abs \L1\(1)\->\N
+For(J,2,dim \L1\)
+N\->\K
+prgmZGCDHCF
+round(K\L1\(J)/N,0)\->\N
+End
+N
+\STOP82\
+\START82\
+\COMMENT=1994 Mikael Bonnier,mikael.bonnier@gmail.com
+\NAME=ZGCDHCF
+\FILE=ZGCDHCF.82P
+min(N,abs \L1\(J))\->\M
+max(N,abs \L1\(J))\->\N
+While M>.5
+MfPart (N/M)\->\L
+M\->\N
+L\->\M
+End
+Return
+Disp "MIKAEL BONNIER,LUND,SWEDEN"
+\STOP82\
+----begin uue----
+begin 644 GCDLCM.82G
+M*BI423@R*BH:"@!'<F]U<&5D(&9I;&4@9&%T960@,#DO,3DO.30L(#$Y.C0S
+M``````````#L``L`+P`%1T-$2$-&```O`"T`<@1=`#^R70`0,1$$3C_32BLR
+M*[5=`!$_7UI'0T1(0T8_$DXK,!$$3C_4/TX_"P`Z``5,0TU,0T0``#H`.`!R
+M!%T`/[)=`!`Q$01./]-**S(KM5T`$3].!$L_7UI'0T1(0T8_$DM=`!!*$8-.
+M*S`1!$X_U#]./PL`5@`%6D=#1$A#1@!6`%0`&DXKLET`$$H1$01-/QE.*[)=
+M`!!*$1$$3C_136PZ-3]-NA!.@TT1!$P_301./TP$33_4/]4_WBI-24M!14PI
+70D].3DE%4BM,54Y$*U-7141%3BH_43@`
+`
+end

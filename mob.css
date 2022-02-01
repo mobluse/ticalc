@@ -1,0 +1,108 @@
+/* Mikael O. Bonnier Default CSS */
+body {
+    font-family: Arial,Helvetica,sans-serif;
+    color: rgb(0, 0, 0); 
+    background-color: rgb(206, 206, 206); 
+    background-image: url(images/backtile.gif);
+}
+body.legal {
+    background-image: none;
+}
+body.bright {
+    background-color: #ffffff; 
+    background-image: none;
+}
+img.flag {
+    float: right; 
+    border: 0px none; 
+    width: 31px; 
+    height: 28px;
+}
+img.heading { 
+    float: left; 
+    border: 0px none ; 
+    width: 206px; 
+    height: 35px;
+}
+img.midi {
+    vertical-align: top; 
+    width: 34px; 
+    height: 34px;
+}
+tr.valigntop {vertical-align: top;}
+span.new {
+    color:#ff0000;
+    font-size:small;
+}
+#imgAltaVista {
+    vertical-align: bottom; 
+    border: 0px none; 
+    width: 63px; 
+    height: 28px;
+}
+#imgYahoo {
+    vertical-align: bottom; 
+    border: 0px none; 
+    width: 49px; 
+    height: 28px;
+}
+table.vote {border-collapse: collapse;}
+table.vote td {padding: 4px;}
+table.orbin {
+    float: right; 
+    border-collapse: separate; 
+    border-spacing: 2px; 
+    border-left: 1px solid #fff;
+    border-top: 1px solid #fff;
+    border-right: 1px solid #999;
+    border-bottom: 1px solid #999;
+}
+table.orbin td {
+    background-color: #808080;
+    border-left: 1px solid #999;
+    border-top: 1px solid #999;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+table.orbin span {
+    color: aqua;
+    font-weight: bold;
+}
+table.orbin span.xsmall {
+    color: aqua;
+    font-size: x-small;
+}
+.small {font-size: small;}
+div.clear {clear: both;}
+a {}
+a:link {color: #0000ff;}
+a:visited {color: #800080;}
+a:focus {color: #8888ff;}
+a:hover {color: #aa0000;}
+a:active {color: #ff0000;}
+dl.spec dt {font-weight: bold;}
+/* http://www.somacon.com/p141.php */
+table.sample {
+	border-width: 1px 1px 1px 1px;
+	border-spacing: 2px;
+	border-style: outset outset outset outset;
+	border-color: gray gray gray gray;
+	border-collapse: separate;
+	/* background-color: white; */ 
+}
+table.sample th {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	border-style: inset inset inset inset;
+	border-color: gray gray gray gray;
+	/* background-color: white; */
+    vertical-align: top;
+}
+table.sample td {
+	border-width: 1px 1px 1px 1px;
+	padding: 1px 1px 1px 1px;
+	border-style: inset inset inset inset;
+	border-color: gray gray gray gray;
+	/* background-color: white; */
+    vertical-align: top;
+}

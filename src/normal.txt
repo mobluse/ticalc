@@ -1,0 +1,85 @@
+Computes area under normal curve up to any Z-score.
+----begin documentation----
+
+                       ****************************
+                       * NORMAL.82P for the TI-82 *
+                       ****************************
+
+ACKNOWLEDGMENT
+
+NORMAL.82P was written by Chuck Vonder Embse, a professor at Michigan State
+University, and is released to the public domain.  You may copy and change
+this program.
+
+INTRODUCTION
+
+This program gives the area under the normal curve up to any Z-score (one
+or two tails).  Graphics are optional.
+
+HOW TO USE NORMAL
+
+Set the calculator to Function graphing mode.  Type prgmNORMAL and enter to
+run the program.  The program first prompts you to enter 1 for 1 tail or
+2 for 2 tails.  You are then prompted to enter the Z value.  If you want to
+see the normal curve graphed and the region shaded, type 1 and enter;
+otherwise, type 2 and enter.  If you chose to graph the curve, hit enter
+when the graph is completed and the value for P(Z) is displayed.
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 04/20/93, 10:33
+\NAME=NORMAL
+\FILE=NORMAL.82P
+:ClrHome:Fix 4
+:Disp "NORMAL CURVE"
+:Disp "1=1 TAIL"
+:Input "2=2 TAILS  ",C
+:Input "Z=",Z
+:0\->\F:If Z\<=\0:1\->\F
+:Input "GRAPH?(Y=1,N=2)",N
+:If N=2:Goto 1
+:FnOff 
+:"(1/\sqrt\2\pi\)e^(\(-)\.5X\^2\)"\->\\Y1\
+:\(-)\4.0\->\Xmin:4.0\->\Xmax:1\->\Xscl
+:\(-)\.2\->\Ymin:.6\->\Ymax:.1\->\Yscl
+:DispGraph
+:Line(Z,0,Z,\Y1\(Z))
+:If C=2
+:Line(\(-)\Z,0,\(-)\Z,\Y1\(\(-)\Z))
+:Text(10,2,"P(Z)=AREA SHADED")
+:If C=1
+:Shade(0,\Y1\,1,\(-)\4,Z)
+:abs Z\->\Z
+:If C=2
+:Shade(0,\Y1\,1,\(-)\Z,Z)
+:Pause 
+:Lbl 1
+:abs Z\->\Z
+:1/(1+.2316419Z)\->\T
+:(1/\sqrt\2\pi\)e^(\(-)\.5Z\^2\)\->\Q
+:Q(.31938153T-.356563782T\^2\+1.78147937T^3-1.821255978T^4+1.330274429T\#\
+^5)\->\P
+:Disp "P(Z)="
+:If C=1 and F=0
+:Disp 1-P
+:If C=1 and F=1
+:Disp P
+:If C=2
+:Disp 1-2P
+\STOP82\
+----begin uue----
+begin 644 NORMAL.82P
+M*BI423@R*BH:"@!0<F]G<F%M(&9I;&4@9&%T960@,#0O,C`O.3,L(#$P.C,S
+M``!V.Q9R6J_"`0L`LP$%3D]234%,``"S`;$!X3YS-#_>*DY/4DU!3"E#55)6
+M12H_WBHQ:C$I5$%)3"H_W"HR:C(I5$%)3%,I*2HK0S_<*EIJ*BM:/S`$1C[.
+M6FTP/C$$1C_<*D=205!(KQ!9:C$K3FHR$2HK3C_.3FHR/M<Q/Y<_*A`Q@[PR
+MK!&_$+`Z-5@-$2H$7A`_L#0Z,`1C"CXT.C`$8PL^,01C`C^P.C($8PP^.C8$
+M8PT^.C$$8P,_WS^<6BLP*UHK7A`06A$1/\Y#:C(_G+!:*S`KL%HK7A`0L%H1
+M$3^3,3`K,BLJ4!!:$6I!4D5!*5-(041%1"H1/\Y#:C$_I#`K7A`K,2NP-"M:
+M$3^R6@1:/\Y#:C(_I#`K7A`K,2NP6BM:$3_8/]8Q/[):!%H_,8,0,7`Z,C,Q
+M-C0Q.5H1!%0_$#&#O#*L$;\0L#HU6@T1!%$_41`Z,S$Y,S@Q-3-4<3HS-38U
+M-C,W.#)4#7`Q.C<X,30W.3,W5/`S<3$Z.#(Q,C4U.3<X5/`T<#$Z,S,P,C<T
+M-#(Y5/`U$010/]XJ4!!:$6HJ/\Y#:C%`1FHP/]XQ<5`_SD-J,4!&:C$_WE`_
+,SD-J,C_>,7$R4&J`
+`
+end
+----end uue----

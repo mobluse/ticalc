@@ -1,0 +1,73 @@
+"Animated" reversal of pixels in any Pic file.
+----begin documentation----
+This 82u-file was prepared by Mikael Bonnier, http://www.df.lth.se.orbin.se/~mikaelb/.
+
+		       ******************************
+		       * TILOGO.82G for the TI-82 *
+		       ******************************
+
+ACKNOWLEDGMENT
+
+TILOGO.82G is a group file containing the program TILOGO.82P and picture
+PIC1.82I.  This program was was written by Pat Hatcher of the TI Graphics 
+Team and is released to the public domain.  You may copy and change this
+program.
+
+INTRODUCTION
+
+This program uses the RecallPic command to display a picture. The short 
+program creates a clear screen, displays Pic1, and then reverses each pixel 
+from the left side of the display to the right.  Pic1 in TILOGO.82G is the 
+TI logo.  You may either replace this Pic1 with your own picture or 
+change "Pic1" in the line "RecallPic Pic1" to a different Pic number.
+
+HOW TO USE TILOGO
+
+Execute TILOGO to begin the program.  Press [ON] <QUIT> to stop execution 
+and return to the Home screen.
+----begin ascii----
+\START82\
+\COMMENT=Program file dated 08/13/96, 18:10
+\NAME=TILOGO
+\FILE=TILOGO.82P
+:1\->\Xmin:1\->\\Delta-x\
+:1\->\Ymin:1\->\\Delta-y\
+:0\->\Xscl:0\->\Yscl
+:FnOff 
+:ClrDraw
+:AxesOff
+:RecallPic Pic1
+:Lbl A
+:For(I,1,95)
+:For(J,1,63)
+:Pt-Change(I,J)
+:End
+:End
+:Goto A
+\STOP82\
+----begin uue----
+begin 644 TILOGO.82G
+M*BI423@R*BH:"@!'<F]U<&5D(&9I;&4@9&%T960@,#<O,C(O.3,L(#$S.C,W
+M``#50C066W9A`PL`30`%5$E,3T=/``!-`$L`,01C"CXQ!&,F/S$$8PP^,01C
+M)S\P!&,"/C`$8P,_ES^%/WX)/YE@`#_603_322LQ*SDU$3_32BLQ*S8S$3^@
+M22M*$3_4/]0_UT$_"P#V`@=@`````````/8"]`+_______________[_____
+M__________[_______________[_______________[_______________[_
+M______________[_______________[_____\`!_______[_____\`!_____
+M__[_____\`!_______[_____\`!_______[_____\`!_______[_____\`!_
+M______[_____\`!_G_____[_____\`!_'_____[_____\``?'_____[_____
+M\``'/_____[_____\``'\#____[_____\``'\`#___[_____\``$(`#___[_
+M____\``,(`#___[_____\``(8`#___[_____\``(8`#___[_____\`/X?@#_
+M__[_____\`?P_`#___[_____\`?P_`#___[___@```?P^`#___[___@```_A
+M^`#___[___P```!A@`!___[___X```!A``!___[___\```!#```___[___^`
+M``##```___[____```##```___[____@``"&```___[____@``&&```___[_
+M___P``&&```___[____P``$,```___[____X``,,```___[____X``/_@``_
+M__[____X#@/_@``___[____\#P?_@``___[____\'P?_``!___[____^/X?_
+M``'___[______X/^``?___[______\'@`!____[______\```/____[_____
+M_^```_____[______^``!_____[_______``#_____[_______``/_____[_
+M______@`/_____[_______P`/_____[_______X`/_____[_______\`'___
+M__[_______^`'_____[________`'_____[________@'_____[_________
+M______[_______________[_______________[_______________[_____
+6__________[_______________X:;@``
+`
+end
+----end uue----
